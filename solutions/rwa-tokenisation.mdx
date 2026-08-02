@@ -1,0 +1,67 @@
+---
+title: "Cardinal for RWA & Tokenisation"
+sidebarTitle: "RWA & Tokenisation"
+description: "Protect primary issuance, redemption and secondary transfer flows for tokenised real-world assets."
+---
+
+## Buyer problem
+
+Tokenised real-world assets bring institutional-grade obligations onto blockchain rails. Issuers, transfer agents and platforms need an explainable control point at the moment of issuance, redemption or transfer, not after value has moved. Existing off-chain controls are strong, but the on-chain moment of settlement is where risk crystallises.
+
+## Cardinal solution
+
+Cardinal adds an explainable decision layer at the moment of on-chain action. It evaluates transaction intent and returns a scored ALLOW, REVIEW, or BLOCK decision that your issuance, redemption and transfer flows can enforce, log and audit.
+
+<Frame caption="RWA and tokenisation sector visual — custom Cardinal imagery to be supplied">
+  <div style={{ padding: '48px', textAlign: 'center', border: '1px dashed rgba(94,203,230,0.4)', borderRadius: '12px', color: '#6B7280' }}>[ RWA and tokenisation sector visual placeholder ]</div>
+</Frame>
+
+## Example protected workflow
+
+<Steps>
+  <Step title="Investor requests issuance, redemption or transfer">
+    Your platform captures the request and prepares the on-chain action.
+  </Step>
+  <Step title="Your backend calls Cardinal">
+    Before signing or settlement, the Protection API is called with the transaction intent and context.
+  </Step>
+  <Step title="Cardinal returns an explainable decision">
+    ALLOW, REVIEW or BLOCK is returned with human-readable findings for issuers, transfer agents and compliance.
+  </Step>
+  <Step title="Your workflow enforces the outcome">
+    REVIEW or BLOCK decisions route into transfer-agent, compliance or legal workflows with full context.
+  </Step>
+  <Step title="Every decision is logged">
+    Outcomes are retained for internal audit, transfer-agent records and regulator-facing reporting.
+  </Step>
+</Steps>
+
+## Commercial value
+
+<CardGroup cols={2}>
+  <Card title="On-chain control point" icon="shield-check">
+    Add an explainable check where existing off-chain controls hand over to blockchain settlement.
+  </Card>
+
+  <Card title="Investor confidence" icon="handshake">
+    Demonstrate a documented, auditable decision layer to allocators and regulators.
+  </Card>
+
+  <Card title="Cleaner audit" icon="file-lines">
+    Decisions and outcomes are logged for transfer-agent, audit and reporting workflows.
+  </Card>
+
+  <Card title="Non-custodial" icon="key">
+    Cardinal never touches keys and never takes custody.
+  </Card>
+</CardGroup>
+
+## Capability boundary
+
+<Warning>
+  Cardinal does not replace KYC, KYB, AML, sanctions, source-of-funds review, custody, legal or title review, or licensed escrow. Pre-transaction decisioning is available today. Incoming-funds tracing and stolen or hacked-funds detection are on the roadmap. ALLOW is not a safety guarantee.
+</Warning>
+
+## Pilot starting point
+
+A typical RWA pilot scopes one flow (for example, issuance or redemption over a threshold), agrees measures with the issuer and transfer agent, and runs for 60 to 90 days. Final scope and commercial terms are agreement-specific. 

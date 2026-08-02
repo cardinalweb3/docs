@@ -1,0 +1,67 @@
+---
+title: "Cardinal for Real Estate & High-Value Payments"
+sidebarTitle: "Real Estate & High-Value Payments"
+description: "Route large, one-off payments through protected settlement patterns designed for enterprise workflows."
+---
+
+## Buyer problem
+
+High-value payments (property completions, OTC settlements, corporate transfers) are one-off, high-stakes events. A single error, misdirection or fraudulent instruction can be catastrophic, and the parties involved often want a documented safety window before funds are final.
+
+## Cardinal solution
+
+Cardinal combines an explainable pre-transaction check with protected settlement patterns. High-value flows can be routed through Cardinal's cancellable or controlled-release settlement rails, so both sides have a documented, auditable window between decision and finality.
+
+<Frame caption="Real estate and high-value payments sector visual — custom Cardinal imagery to be supplied">
+  <div style={{ padding: '48px', textAlign: 'center', border: '1px dashed rgba(94,203,230,0.4)', borderRadius: '12px', color: '#6B7280' }}>[ Real estate and high-value payments visual placeholder ]</div>
+</Frame>
+
+## Example protected workflow
+
+<Steps>
+  <Step title="Parties agree the payment">
+    Your platform prepares the payment, counterparties and required approvals.
+  </Step>
+  <Step title="Your platform calls Cardinal">
+    Before signing, the Protection API is called with the transaction intent and context.
+  </Step>
+  <Step title="Cardinal returns an explainable decision">
+    ALLOW, REVIEW or BLOCK is returned with human-readable findings for operators, counterparties and audit.
+  </Step>
+  <Step title="Protected settlement, where appropriate">
+    For high-value flows, transfers can be routed through SafeSend or Programmable Escrow for a documented safety window.
+  </Step>
+  <Step title="Decisions and outcomes are logged">
+    Every step is retained for legal review, audit and post-transaction reporting.
+  </Step>
+</Steps>
+
+## Commercial value
+
+<CardGroup cols={2}>
+  <Card title="Reduce catastrophic loss" icon="shield-check">
+    Catch errors and fraud before funds are final, not after.
+  </Card>
+
+  <Card title="Documented safety window" icon="clock-rotate-left">
+    Protected settlement gives both sides an auditable buffer between decision and finality.
+  </Card>
+
+  <Card title="Fits enterprise workflows" icon="puzzle-piece">
+    Cardinal complements your existing approval, legal and audit processes.
+  </Card>
+
+  <Card title="Non-custodial" icon="key">
+    Cardinal is trust-minimised and never takes custody of user funds.
+  </Card>
+</CardGroup>
+
+## Capability boundary
+
+<Warning>
+  Cardinal does not replace licensed escrow, legal or title review, KYC, KYB, AML, sanctions or source-of-funds review. SafeSend is a controlled Arbitrum Sepolia testnet MVP and Programmable Escrow is in final testing and security hardening; availability is agreement-specific. ALLOW is not a safety guarantee.
+</Warning>
+
+## Pilot starting point
+
+A real estate or high-value payment pilot typically scopes one payment type (for example, deposits, completions, or OTC settlements over a defined threshold), agrees measures with the operator and counterparties, and runs for 60 to 90 days. Final scope and commercial terms are agreement-specific. 
