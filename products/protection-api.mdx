@@ -1,5 +1,5 @@
 ---
-title: "Protection API: Pre-Signature Risk Evaluation"
+title: "Protection API: Pre-Signature Transaction Risk Check"
 sidebarTitle: "Protection API"
 description: "Evaluate transaction intent before wallet signing. The Protection API returns an ALLOW, REVIEW, or BLOCK decision with scored findings."
 ---
@@ -64,8 +64,8 @@ Call this endpoint before requesting any wallet signature, token approval, or co
   Whether the caller considers this contract verified or trusted on-chain.
 </ParamField>
 
-<ParamField body="approval_amount" type="number">
-  The token approval amount for `approval`-type transactions.
+<ParamField body="approval_amount" type="string">
+  The token approval amount for `approval`-type transactions. Pass `"unlimited"`, `"max"`, or an exact numeric amount as a string.
 </ParamField>
 
 <ParamField body="permissions" type="array">
@@ -98,7 +98,14 @@ curl -X POST https://api.cardinalweb3.com/api/check-transaction \
 </ResponseField>
 
 <ResponseField name="risk_level" type="string">
-  A human-readable risk band: `LOW`, `MEDIUM`, `HIGH`, or `CRITICAL`.
+  A human-readable risk band derived from `risk_score`:
+
+  | Level | Score range |
+  |---|---|
+  | `LOW` | 0 – 29 |
+  | `MEDIUM` | 30 – 59 |
+  | `HIGH` | 60 – 84 |
+  | `CRITICAL` | 85 – 100 |
 </ResponseField>
 
 <ResponseField name="network_valid" type="boolean">

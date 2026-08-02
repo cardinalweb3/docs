@@ -1,7 +1,7 @@
 ---
-title: "Cardinal Pilot Program: Onboarding Guide"
+title: "Cardinal Pilot Onboarding: Design-Partner Program Guide"
 sidebarTitle: "Pilot Program"
-description: "Plan, integrate, launch, and evaluate a controlled Cardinal design-partner pilot in 60–90 days with measurable outcomes."
+description: "Plan, integrate, launch, and evaluate a Cardinal design-partner pilot in 60–90 days with clear scope, outcomes, and operational controls."
 ---
 
 Cardinal pilots help you validate pre-transaction protection and risk-routed settlement in a controlled environment before wider production adoption. A typical design-partner pilot runs for **60–90 days**, focuses on one clearly defined transaction flow, targets a limited group of users, operates within explicit network and asset boundaries, and tracks measurable success criteria throughout.
@@ -80,6 +80,8 @@ The pilot is complete only when technical results and your security, compliance,
     - Use test assets where the selected product is not production-ready
 
     Your integration should: build the final canonical transaction intent, submit it to the Protection API from a trusted backend, store the Cardinal `request_id`, decision, findings, and intent hash, apply your agreed decision policy, bind user confirmation to the checked intent, verify that the signed transaction matches the intent, and reconcile the final blockchain result.
+
+    Read the [Integration Guide](/guides/integration-overview) and [Security Best Practices](/security/best-practices) before implementation.
 
     **Primary output:** Staging integration
   </Step>

@@ -35,8 +35,8 @@ This guide is designed for the following integration types:
 
     ```json
     {
-      "from": "0xBuyerWallet",
-      "to": "0xApprovedSettlementWallet",
+      "from_address": "0xBuyerWallet",
+      "to_address": "0xApprovedSettlementWallet",
       "chain": "arbitrum",
       "token": "USDC",
       "amount": "25000",
@@ -44,7 +44,7 @@ This guide is designed for the following integration types:
     }
     ```
 
-    Required Protection API fields are `from`, `to`, `chain`, `token`, and `amount`. Include `contract_address`, `contract_verified`, `approval_amount`, and `permissions` when they describe the proposed action. Never include confidential contracts, identity documents, personal data, or property records in the Protection API request.
+    Required Protection API fields are `from_address`, `to_address`, `chain`, `token`, and `amount`. Include `contract_address`, `contract_verified`, `approval_amount`, and `permissions` when they describe the proposed action. Never include confidential contracts, identity documents, personal data, or property records in the Protection API request.
   </Step>
 
   <Step title="Submit the canonical intent to Cardinal">

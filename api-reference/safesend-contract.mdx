@@ -1,7 +1,7 @@
 ---
-title: "SafeSend Smart Contract Reference"
+title: "Cardinal SafeSend ERC-20 Contract Complete Reference"
 sidebarTitle: "SafeSend Contract"
-description: "Complete reference for the Cardinal SafeSend ERC-20 contract: delayed, cancellable token transfers with a built-in platform fee and permissionless release."
+description: "Complete reference for the Cardinal SafeSend ERC-20 contract: delayed, cancellable token transfers with a 2.5% platform fee and permissionless settlement."
 ---
 
 The SafeSend contract locks ERC-20 tokens at the time of creation and holds them until a future release time chosen by the sender. During the window between creation and that release time, the sender can cancel and recover their tokens in full. After the release time, anyone can trigger settlement — the recipient receives the transfer amount minus the platform fee, and the fee goes to the configured fee recipient. This design gives senders a meaningful cancellation window without requiring the recipient's cooperation to complete eventual settlement.
@@ -174,6 +174,7 @@ The current pilot fee is **2.5% (250 basis points)**. For example, a 1,000 USDC 
 | `SafeSendCancelled` | `transferId`, `sender`                                                       | Transfer cancelled by sender |
 | `SafeSendReleased`  | `transferId`, `recipient`, `recipientAmount`, `feeAmount`                    | Tokens delivered to recipient |
 | `FeeConfigUpdated`  | `feeRecipient`, `feeBps`                                                     | Fee configuration changed  |
+| `OwnershipTransferred` | `previousAdmin`, `newAdmin`                                               | Administrative ownership transferred to a new admin |
 
 ## Ethers.js example
 

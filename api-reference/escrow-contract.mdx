@@ -1,7 +1,7 @@
 ---
-title: "Escrow Smart Contract Reference"
+title: "Cardinal Escrow ERC-20 Contract Complete Reference"
 sidebarTitle: "Escrow Contract"
-description: "Complete reference for the Cardinal Escrow ERC-20 contract: buyer/seller settlement with dispute resolution, timed seller claim, and a platform fee on release."
+description: "Complete reference for the Cardinal Escrow ERC-20 contract: buyer/seller settlement with dispute resolution, a timed seller claim, and a 2% fee on release."
 ---
 
 The Cardinal Escrow contract provides on-chain settlement between a buyer and a seller for higher-value or otherwise irreversible ERC-20 transactions. The buyer locks funds at creation. The seller must accept before a deadline, which starts a release window during which the buyer can release funds or either party can raise a dispute. If the release window passes without action, the seller can claim directly. A designated dispute resolver handles any escalated disputes, directing funds either to the seller or back to the buyer.
@@ -269,6 +269,10 @@ Returns the platform fee that would be charged on settlement for a given amount.
 | `EscrowRefunded`         | `escrowId`, `buyer`, `amount`                                                            | Funds returned to buyer               |
 | `EscrowDisputed`         | `escrowId`, `raisedBy`                                                                   | Either party escalates                |
 | `EscrowDisputeResolved`  | `escrowId`, `disputeResolver`, `releasedToSeller`                                        | Resolver settles the dispute          |
+| `FeeConfigUpdated`       | `feeRecipient`, `feeBps`                                                                 | Fee configuration changed             |
+| `ReleaseWindowUpdated`   | `releaseWindow`                                                                          | Global release window changed         |
+| `DisputeResolverUpdated` | `disputeResolver`                                                                        | Dispute resolver authority changed    |
+| `OwnershipTransferred`   | `previousAdmin`, `newAdmin`                                                              | Administrative ownership transferred  |
 
 ## Ethers.js example
 

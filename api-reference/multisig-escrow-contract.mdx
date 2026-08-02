@@ -1,7 +1,7 @@
 ---
-title: "Multisig Escrow Smart Contract Reference"
+title: "Cardinal Multisig Escrow ERC-20 Smart Contract Reference"
 sidebarTitle: "Multisig Escrow"
-description: "Complete reference for the Cardinal Multisig Escrow ERC-20 contract: threshold-gated release by a panel of authorised approvers, with no dispute resolution or release window timeout."
+description: "Complete reference for the Cardinal Multisig Escrow ERC-20 contract: approver threshold-gated settlement with a 2.5% platform fee on release."
 ---
 
 The Cardinal Multisig Escrow contract provides ERC-20 settlement for higher-value transactions where fund release requires a configurable number of authorised approvers to sign off. The buyer locks tokens at creation, the seller accepts, and then a set of wallets holding the `APPROVER_ROLE` each cast one approval vote. Once the number of approvals reaches the global release threshold, anyone can trigger the actual settlement. There is no dispute resolution mechanism and no release window timeout — release is entirely approval-gated.
@@ -242,6 +242,9 @@ Returns the platform fee that would be charged on settlement for a given amount.
 | `ReleaseApproved`          | `escrowId`, `approver`, `approvalCount`, `threshold`                                     | An approver casts one vote                 |
 | `MultisigEscrowReleased`   | `escrowId`, `seller`, `sellerAmount`, `feeAmount`                                        | Threshold met; seller settlement completed |
 | `MultisigEscrowRefunded`   | `escrowId`, `buyer`, `amount`                                                            | Funds returned to buyer                    |
+| `ReleaseThresholdUpdated`  | `previousThreshold`, `newThreshold`                                                      | Global release threshold changed           |
+| `FeeConfigUpdated`         | `feeRecipient`, `feeBps`                                                                 | Fee configuration changed                  |
+| `OwnershipTransferred`     | `previousAdmin`, `newAdmin`                                                              | Administrative ownership transferred       |
 
 ## Ethers.js example
 

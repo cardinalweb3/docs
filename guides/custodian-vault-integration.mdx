@@ -26,8 +26,8 @@ Cardinal helps custodians and vault operators place an explainable transaction-c
 
     ```json
     {
-      "from": "0xInstitutionalVault",
-      "to": "0xApprovedCounterparty",
+      "from_address": "0xInstitutionalVault",
+      "to_address": "0xApprovedCounterparty",
       "chain": "ethereum",
       "token": "USDC",
       "amount": "500000",
@@ -35,7 +35,7 @@ Cardinal helps custodians and vault operators place an explainable transaction-c
     }
     ```
 
-    Required fields are `from`, `to`, `chain`, `token`, and `amount`. Include `contract_address`, `contract_verified`, `approval_amount`, and `permissions` when the proposed action involves a contract call or token approval.
+    Required fields are `from_address`, `to_address`, `chain`, `token`, and `amount`. Include `contract_address`, `contract_verified`, `approval_amount`, and `permissions` when the proposed action involves a contract call or token approval.
 
     Generate or preserve an internal intent hash from the canonical payload. Store it with the Cardinal `request_id`, policy result, approval record, and signed transaction.
   </Step>

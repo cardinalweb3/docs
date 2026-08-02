@@ -1,5 +1,5 @@
 ---
-title: "Programmable Escrow: Secure Settlement Contracts"
+title: "Programmable Escrow: Protected On-Chain ERC-20 Settlement"
 sidebarTitle: "Escrow"
 description: "On-chain ERC-20 escrow with buyer/seller settlement and multisig-gated release. Protection API evaluation runs before every funding transaction."
 ---
@@ -251,6 +251,13 @@ The fee formula is the same for both escrow models:
 ```text
 fee amount = amount × fee_bps ÷ 10,000
 ```
+
+The pilot fee rates are:
+
+| Contract model | Fee rate |
+|---|---|
+| Buyer / Seller Escrow | **2%** (200 bps) |
+| Multisig Escrow | **2.5%** (250 bps) |
 
 Fees are charged **only on settlement to the seller**. Refunds — pre-acceptance or via dispute — return the full locked amount to the buyer with no deduction. Always call `previewFee` and display the result to the buyer before wallet confirmation; do not hardcode a fee rate in your application.
 

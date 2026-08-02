@@ -1,5 +1,5 @@
 ---
-title: "Decision Enforcement in Cardinal Integrations"
+title: "Cardinal Decision Enforcement: ALLOW, REVIEW, BLOCK"
 sidebarTitle: "Decision Enforcement"
 description: "Enforce Cardinal's ALLOW, REVIEW, and BLOCK decisions correctly — including fail-closed error handling, tamper prevention, and check-to-sign binding."
 ---
@@ -88,17 +88,19 @@ async function applyDecision(decision: CardinalDecision, requestId: string): Pro
 // Wrap all Cardinal calls to enforce fail-closed behaviour
 async function checkAndEnforce(intent: TransactionIntent): Promise<void> {
   let decision: CardinalDecision;
+  let requestId: string;
 
   try {
     const result = await callCardinalAPI(intent);
     decision = result.recommended_action;
+    requestId = result.request_id;
   } catch (err) {
     // Any error — network, timeout, 5xx — is treated as BLOCK
     await logFailClosed(intent, err);
     throw new Error('Cardinal check failed — transaction blocked (fail-closed)');
   }
 
-  await applyDecision(decision, result.request_id);
+  await applyDecision(decision, requestId);
 }
 ```
 

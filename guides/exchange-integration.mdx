@@ -27,15 +27,15 @@ Keep Cardinal behind your exchange backend. Never expose a partner API key in a 
 
 ## Submit the withdrawal intent
 
-Use the Protection API endpoint with the following required fields: `from`, `to`, `chain`, `token`, and `amount`. Include `transaction_type`, `contract_address`, `contract_verified`, `approval_amount`, and `permissions` when they describe the proposed action.
+Use the Protection API endpoint with the following required fields: `from_address`, `to_address`, `chain`, `token`, and `amount`. Include `transaction_type`, `contract_address`, `contract_verified`, `approval_amount`, and `permissions` when they describe the proposed action.
 
 ```bash
 curl -X POST "$CARDINAL_API_URL/api/check-transaction" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $CARDINAL_API_KEY" \
   -d '{
-    "from": "0xExchangeHotWallet",
-    "to": "0xCustomerDestination",
+    "from_address": "0xExchangeHotWallet",
+    "to_address": "0xCustomerDestination",
     "chain": "arbitrum",
     "token": "USDC",
     "amount": "2500",

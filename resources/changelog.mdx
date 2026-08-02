@@ -1,5 +1,5 @@
 ---
-title: "Cardinal Changelog & Release Notes"
+title: "Cardinal Changelog: Dated API and Product Release Notes"
 sidebarTitle: "Changelog"
 description: "Dated Cardinal product, API, smart-contract, and documentation updates — with availability labels and known limitations for each release."
 ---
@@ -126,6 +126,49 @@ The following items remain in development, validation, or production-readiness w
 - External threat intelligence integration
 - WalletConnect, Coinbase Wallet, and Rabby support
 - Incoming-funds tracing and stolen or hacked-funds detection
+
+---
+
+## Release-note policy
+
+Future entries should contain:
+
+- Release date
+- Product or documentation area
+- Availability label
+- Exact environment and network
+- Added, changed, fixed, or deprecated behaviour
+- Migration or customer action required
+- Known limitations
+- Contract addresses when publicly approved
+- Audit and remediation status when confirmed
+- Links to relevant guides
+
+## Versioning guidance
+
+Cardinal may use different version identifiers for APIs, applications, smart contracts, and documentation.
+
+- **API versions** describe the request and response contract.
+- **Application versions** describe public interface releases.
+- **Smart-contract releases** must identify network and deployed address.
+- **Documentation updates** describe guidance and do not change product behaviour by themselves.
+
+Do not infer compatibility between versions. Confirm the version and environment included in the applicable partner agreement.
+
+## Breaking changes
+
+A future change is considered breaking when an existing integration must change to continue operating safely. Examples include:
+
+- Required request-field changes
+- Authentication changes
+- Decision or finding schema changes
+- Network or token identifier changes
+- Contract replacement
+- State-transition changes
+- Removed or renamed endpoints
+- Changed signature, approval, or permission requirements
+
+Breaking changes will include migration guidance and an effective date where appropriate.
 
 ---
 
