@@ -4,110 +4,150 @@ sidebarTitle: "Home"
 description: "Cardinal gives wallets, exchanges, custodians and high-value payment platforms an explainable decision layer before signing or settlement."
 ---
 
-<div className="bg-[#111318] text-white">
-  <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
-    <div className="grid items-center gap-12 lg:grid-cols-2">
-      <div>
-        <div className="inline-flex rounded-full border border-[#5ECBE6]/25 bg-[#5ECBE6]/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#5ECBE6]">Transaction integrity infrastructure</div>
-        <h1 className="mt-6 text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl">Protect digital-asset transactions before value moves.</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-400">Cardinal gives wallets, exchanges, custodians and high-value payment platforms an explainable decision layer before signing or settlement.</p>
+<style>
+  {`
+    .cardinal-page { background:#111318; color:#fff; }
+    .cardinal-shell { width:min(1180px, calc(100% - 40px)); margin:0 auto; }
+    .cardinal-hero { padding:88px 0 56px; text-align:center; }
+    .cardinal-eyebrow { display:inline-block; padding:7px 12px; border:1px solid rgba(94,203,230,.28); border-radius:999px; background:rgba(94,203,230,.08); color:#5ECBE6; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    .cardinal-title { max-width:880px; margin:24px auto 0; font-size:clamp(42px,6vw,72px); line-height:1.04; letter-spacing:-.035em; font-weight:650; }
+    .cardinal-lead { max-width:720px; margin:24px auto 0; color:#A7ADB8; font-size:19px; line-height:1.7; }
+    .cardinal-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:30px; }
+    .cardinal-button { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 20px; border-radius:10px; font-weight:650; text-decoration:none!important; }
+    .cardinal-button-primary { background:#5ECBE6; color:#111318!important; }
+    .cardinal-button-secondary { border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.035); color:#fff!important; }
+    .cardinal-proof { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); margin-top:54px; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden; background:#15181E; }
+    .cardinal-proof-item { min-width:0; padding:20px; border-right:1px solid rgba(255,255,255,.08); }
+    .cardinal-label { color:#747C89; font-size:11px; font-weight:650; letter-spacing:.1em; text-transform:uppercase; }
+    .cardinal-value { margin-top:6px; color:#fff; font-weight:650; }
+    .cardinal-section { padding:80px 0; border-top:1px solid rgba(255,255,255,.08); }
+    .cardinal-section-alt { background:#15181E; }
+    .cardinal-kicker { color:#5ECBE6; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    .cardinal-h2 { max-width:760px; margin:10px 0 0; font-size:clamp(30px,4vw,44px); line-height:1.12; letter-spacing:-.025em; font-weight:650; }
+    .cardinal-copy { max-width:680px; margin-top:14px; color:#9CA3AF; line-height:1.7; }
+    .cardinal-decision { margin-top:38px; padding:26px; border:1px solid rgba(255,255,255,.11); border-radius:18px; background:#1B1E24; }
+    .cardinal-decision-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,.09); }
+    .cardinal-status { padding:6px 10px; border-radius:999px; background:rgba(34,197,94,.10); color:#22C55E; font-size:11px; font-weight:700; }
+    .cardinal-flow { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-top:20px; }
+    .cardinal-flow-card { min-width:0; padding:18px; border:1px solid rgba(255,255,255,.09); border-radius:12px; background:#111318; }
+    .cardinal-flow-number { color:#5ECBE6; font-size:11px; font-weight:700; letter-spacing:.1em; }
+    .cardinal-flow-title { margin-top:7px; font-weight:650; }
+    .cardinal-flow-text { margin-top:7px; color:#8F96A3; font-size:14px; line-height:1.55; }
+    .cardinal-outcomes { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .cardinal-pill { padding:6px 9px; border-radius:999px; font-size:11px; font-weight:700; }
+    .cardinal-allow { background:rgba(34,197,94,.10); color:#22C55E; }
+    .cardinal-review { background:rgba(245,158,11,.10); color:#F59E0B; }
+    .cardinal-block { background:rgba(239,68,68,.10); color:#EF4444; }
+    .cardinal-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(245px,1fr)); gap:16px; margin-top:34px; }
+    .cardinal-card { min-width:0; padding:24px; border:1px solid rgba(255,255,255,.10); border-radius:14px; background:#1B1E24; color:#fff!important; text-decoration:none!important; }
+    .cardinal-card:hover { border-color:rgba(94,203,230,.38); }
+    .cardinal-card-top { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
+    .cardinal-card-title { margin-top:28px; font-size:19px; font-weight:650; }
+    .cardinal-card-copy { margin-top:10px; color:#9CA3AF; font-size:14px; line-height:1.6; }
+    .cardinal-card-link { margin-top:24px; color:#5ECBE6; font-size:14px; font-weight:650; }
+    .cardinal-trust { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:28px; align-items:start; }
+    .cardinal-cta { padding:38px; border:1px solid rgba(94,203,230,.28); border-radius:18px; background:rgba(94,203,230,.055); text-align:center; }
+    @media (max-width:640px) {
+    .cardinal-shell { width:min(100% - 28px,1180px); }
+    .cardinal-hero { padding:58px 0 40px; }
+    .cardinal-section { padding:58px 0; }
+    .cardinal-title { font-size:40px; }
+    .cardinal-decision { padding:18px; }
+    .cardinal-proof-item { border-right:0; border-bottom:1px solid rgba(255,255,255,.08); }
+    .cardinal-cta { padding:26px 18px; }
+    }
+    `}
+</style>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a href="/contact/discuss-a-pilot" className="rounded-lg bg-[#5ECBE6] px-5 py-3 font-semibold text-[#111318] no-underline">Discuss a pilot</a>
-          <a href="/overview/how-it-works" className="rounded-lg border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white no-underline">See how Cardinal works</a>
-        </div>
+<div className="cardinal-page">
+  <div className="cardinal-shell">
+    <section className="cardinal-hero">
+      <div className="cardinal-eyebrow">Transaction integrity infrastructure</div>
+      <h1 className="cardinal-title">Protect digital-asset transactions before value moves.</h1>
+      <p className="cardinal-lead">Cardinal gives wallets, exchanges, custodians and high-value payment platforms an explainable decision layer before signing or settlement.</p>
 
-        <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400"><span>Non-custodial</span><span className="text-gray-700">•</span><span>Explainable outcomes</span><span className="text-gray-700">•</span><span>Controlled pilots</span></div>
+      <div className="cardinal-actions">
+        <a href="/contact/discuss-a-pilot" className="cardinal-button cardinal-button-primary">Discuss a pilot</a>
+        <a href="/overview/how-it-works" className="cardinal-button cardinal-button-secondary">See how Cardinal works</a>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-[#1B1E24] p-6 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-white/10 pb-5">
-          <div><div className="text-xs font-semibold uppercase tracking-wider text-[#5ECBE6]">Protection API</div><div className="mt-1 font-semibold text-white">Pre-transaction decision</div></div>
-          <div className="rounded-full bg-[#22C55E]/10 px-3 py-1 text-xs font-semibold text-[#22C55E]">AVAILABLE</div>
+      <div className="cardinal-proof">
+        <div className="cardinal-proof-item"><div className="cardinal-label">Decision point</div><div className="cardinal-value">Before value moves</div></div>
+        <div className="cardinal-proof-item"><div className="cardinal-label">Operating model</div><div className="cardinal-value">Non-custodial</div></div>
+        <div className="cardinal-proof-item"><div className="cardinal-label">Decision output</div><div className="cardinal-value">Explainable</div></div>
+        <div className="cardinal-proof-item"><div className="cardinal-label">Starting point</div><div className="cardinal-value">Controlled pilot</div></div>
+      </div>
+    </section>
+
+    <section className="cardinal-section">
+      <div className="cardinal-kicker">How Cardinal works</div>
+      <h2 className="cardinal-h2">One control point before an irreversible transaction.</h2>
+      <p className="cardinal-copy">Evaluate the proposed transfer, return an explainable outcome, and let the partner workflow enforce the correct action.</p>
+
+      <div className="cardinal-decision">
+        <div className="cardinal-decision-head">
+          <div><div className="cardinal-label">Protection API</div><div className="cardinal-value">Pre-transaction decision</div></div>
+          <div className="cardinal-status">AVAILABLE FOR PILOT</div>
         </div>
 
-        <div className="mt-5 rounded-xl border border-white/10 bg-[#111318] p-5">
-          <div className="flex items-center justify-between">
-            <div><div className="text-xs uppercase tracking-wider text-gray-500">Proposed transfer</div><div className="mt-1 font-semibold text-white">Treasury → Counterparty</div></div>
-            <div className="text-right"><div className="text-xs text-gray-500">Network</div><div className="mt-1 text-sm text-white">EVM</div></div>
-          </div>
-
-          <div className="mt-5 grid grid-cols-3 gap-2">
-            <div className="rounded-lg border border-white/10 p-3"><div className="text-xs text-gray-500">Destination</div><div className="mt-1 text-sm text-white">Checked</div></div>
-            <div className="rounded-lg border border-white/10 p-3"><div className="text-xs text-gray-500">Network</div><div className="mt-1 text-sm text-white">Matched</div></div>
-            <div className="rounded-lg border border-white/10 p-3"><div className="text-xs text-gray-500">Policy</div><div className="mt-1 text-sm text-white">Applied</div></div>
-          </div>
+        <div className="cardinal-flow">
+          <div className="cardinal-flow-card"><div className="cardinal-flow-number">01 · CHECK</div><div className="cardinal-flow-title">Evaluate</div><div className="cardinal-flow-text">Destination, network, transaction context and policy signals.</div></div>
+          <div className="cardinal-flow-card"><div className="cardinal-flow-number">02 · DECIDE</div><div className="cardinal-flow-title">Explain</div><div className="cardinal-outcomes"><span className="cardinal-pill cardinal-allow">ALLOW</span><span className="cardinal-pill cardinal-review">REVIEW</span><span className="cardinal-pill cardinal-block">BLOCK</span></div></div>
+          <div className="cardinal-flow-card"><div className="cardinal-flow-number">03 · PROTECT</div><div className="cardinal-flow-title">Enforce</div><div className="cardinal-flow-text">Continue, pause, block, or route through protected settlement.</div></div>
         </div>
+      </div>
+    </section>
+  </div>
 
-        <div className="mt-4 rounded-xl border border-[#F59E0B]/25 bg-[#F59E0B]/5 p-5">
-          <div className="flex items-center justify-between gap-4">
-            <div><div className="text-xs font-semibold uppercase tracking-wider text-[#F59E0B]">Decision · Review</div><div className="mt-2 font-semibold text-white">Additional approval required</div></div>
-            <div className="rounded-lg bg-[#F59E0B]/10 px-3 py-2 text-xs font-semibold text-[#F59E0B]">REVIEW</div>
-          </div>
+  <section className="cardinal-section cardinal-section-alt">
+    <div className="cardinal-shell">
+      <div className="cardinal-kicker">Platform</div>
+      <h2 className="cardinal-h2">Three products. One protection layer.</h2>
+      <p className="cardinal-copy">Start with decisioning, then introduce protected settlement when the workflow needs additional control.</p>
 
-          <div className="mt-3 text-sm text-gray-400">Reason returned before signing.</div>
-        </div>
-
-        <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs font-semibold"><div className="rounded-lg bg-[#22C55E]/10 py-2 text-[#22C55E]">ALLOW</div><div className="rounded-lg bg-[#F59E0B]/10 py-2 text-[#F59E0B]">REVIEW</div><div className="rounded-lg bg-[#EF4444]/10 py-2 text-[#EF4444]">BLOCK</div></div>
+      <div className="cardinal-grid">
+        <a href="/products/protection-api" className="cardinal-card"><div className="cardinal-card-top"><span className="cardinal-flow-number">01</span><span className="cardinal-status">AVAILABLE</span></div><div className="cardinal-card-title">Protection API</div><div className="cardinal-card-copy">Explainable pre-transaction decisioning for wallets, withdrawals, treasury and settlement.</div><div className="cardinal-card-link">Explore Protection API →</div></a>
+        <a href="/products/safesend" className="cardinal-card"><div className="cardinal-card-top"><span className="cardinal-flow-number">02</span><span className="cardinal-pill cardinal-review">CONTROLLED MVP</span></div><div className="cardinal-card-title">SafeSend</div><div className="cardinal-card-copy">Cancellable, time-locked transfers on Arbitrum Sepolia for selected design partners.</div><div className="cardinal-card-link">Explore SafeSend →</div></a>
+        <a href="/products/programmable-escrow" className="cardinal-card"><div className="cardinal-card-top"><span className="cardinal-flow-number">03</span><span className="cardinal-pill" style={{background:"rgba(139,109,255,.1)",color:"#8B6DFF"}}>FINAL TESTING</span></div><div className="cardinal-card-title">Programmable Escrow</div><div className="cardinal-card-copy">Rule-based release for buyer/seller and threshold-gated settlement.</div><div className="cardinal-card-link">Explore Programmable Escrow →</div></a>
       </div>
     </div>
   </section>
 
-  <section className="border-y border-white/10 bg-[#15181E]">
-    <div className="mx-auto grid max-w-7xl px-6 md:grid-cols-4 lg:px-8">
-      <div className="py-6 md:border-r md:border-white/10 md:px-5"><div className="text-xs uppercase tracking-wider text-gray-500">Decision point</div><div className="mt-1 font-semibold text-white">Before value moves</div></div>
-      <div className="py-6 md:border-r md:border-white/10 md:px-5"><div className="text-xs uppercase tracking-wider text-gray-500">Operating model</div><div className="mt-1 font-semibold text-white">Non-custodial</div></div>
-      <div className="py-6 md:border-r md:border-white/10 md:px-5"><div className="text-xs uppercase tracking-wider text-gray-500">Decision output</div><div className="mt-1 font-semibold text-white">Explainable</div></div>
-      <div className="py-6 md:px-5"><div className="text-xs uppercase tracking-wider text-gray-500">Starting point</div><div className="mt-1 font-semibold text-white">Controlled pilot</div></div>
-    </div>
-  </section>
+  <section className="cardinal-section">
+    <div className="cardinal-shell">
+      <div className="cardinal-kicker">Solutions</div>
+      <h2 className="cardinal-h2">Built around the workflow you already operate.</h2>
+      <p className="cardinal-copy">Cardinal adds decisioning and protected settlement without replacing existing controls.</p>
 
-  <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-    <div className="max-w-2xl"><div className="text-xs font-semibold uppercase tracking-wider text-[#5ECBE6]">Platform</div><h2 className="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">Three products. One protection layer.</h2><p className="mt-4 text-gray-400">Start with decisioning, then introduce protected settlement where the transaction needs additional control.</p></div>
-
-    <div className="mt-10 grid gap-5 lg:grid-cols-3">
-      <a href="/products/protection-api" className="rounded-2xl border border-[#22C55E]/20 bg-[#1B1E24] p-6 no-underline hover:border-[#22C55E]/40"><div className="flex justify-between"><span className="text-sm font-semibold text-[#5ECBE6]">01</span><span className="text-xs font-semibold text-[#22C55E]">AVAILABLE</span></div><div className="mt-8 text-xl font-semibold text-white">Protection API</div><p className="mt-3 text-sm leading-6 text-gray-400">Explainable pre-transaction decisioning for wallets, withdrawals, treasury and settlement.</p><div className="mt-8 text-sm font-semibold text-[#5ECBE6]">Explore product →</div></a>
-      <a href="/products/safesend" className="rounded-2xl border border-[#F59E0B]/20 bg-[#1B1E24] p-6 no-underline hover:border-[#F59E0B]/40"><div className="flex justify-between"><span className="text-sm font-semibold text-[#8B6DFF]">02</span><span className="text-xs font-semibold text-[#F59E0B]">CONTROLLED MVP</span></div><div className="mt-8 text-xl font-semibold text-white">SafeSend</div><p className="mt-3 text-sm leading-6 text-gray-400">Cancellable, time-locked transfers on Arbitrum Sepolia for selected design partners.</p><div className="mt-8 text-sm font-semibold text-[#5ECBE6]">Explore product →</div></a>
-      <a href="/products/programmable-escrow" className="rounded-2xl border border-[#8B6DFF]/20 bg-[#1B1E24] p-6 no-underline hover:border-[#8B6DFF]/40"><div className="flex justify-between"><span className="text-sm font-semibold text-[#8B6DFF]">03</span><span className="text-xs font-semibold text-[#8B6DFF]">FINAL TESTING</span></div><div className="mt-8 text-xl font-semibold text-white">Programmable Escrow</div><p className="mt-3 text-sm leading-6 text-gray-400">Rule-based release for buyer/seller and threshold-gated settlement.</p><div className="mt-8 text-sm font-semibold text-[#5ECBE6]">Explore product →</div></a>
-    </div>
-  </section>
-
-  <section className="bg-[#15181E]">
-    <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-      <div className="grid gap-12 lg:grid-cols-3">
-        <div><div className="text-xs font-semibold uppercase tracking-wider text-[#8B6DFF]">Solutions</div><h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">Built around the workflow you already operate.</h2><p className="mt-4 text-gray-400">Add a decision and protection layer without replacing existing controls.</p></div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2">
-          <a href="/solutions/exchanges" className="rounded-xl border border-white/10 bg-[#1B1E24] p-5 no-underline hover:border-[#5ECBE6]/30"><div className="font-semibold text-white">Exchanges</div><div className="mt-2 text-sm text-gray-400">Outbound withdrawal decisioning.</div></a>
-          <a href="/solutions/wallet-providers" className="rounded-xl border border-white/10 bg-[#1B1E24] p-5 no-underline hover:border-[#5ECBE6]/30"><div className="font-semibold text-white">Wallet providers</div><div className="mt-2 text-sm text-gray-400">Explainable checks before signing.</div></a>
-          <a href="/solutions/custodians-vaults" className="rounded-xl border border-white/10 bg-[#1B1E24] p-5 no-underline hover:border-[#5ECBE6]/30"><div className="font-semibold text-white">Custodians & vaults</div><div className="mt-2 text-sm text-gray-400">Policy before HSM or MPC signing.</div></a>
-          <a href="/solutions/rwa-tokenisation" className="rounded-xl border border-white/10 bg-[#1B1E24] p-5 no-underline hover:border-[#5ECBE6]/30"><div className="font-semibold text-white">RWA & tokenisation</div><div className="mt-2 text-sm text-gray-400">Issuance, redemption and transfer protection.</div></a>
-          <a href="/solutions/real-estate-high-value-payments" className="rounded-xl border border-white/10 bg-[#1B1E24] p-5 no-underline hover:border-[#5ECBE6]/30 sm:col-span-2"><div className="font-semibold text-white">Real estate & high-value payments</div><div className="mt-2 text-sm text-gray-400">Decisioning and protected settlement for large transfers.</div></a>
-        </div>
+      <div className="cardinal-grid">
+        <a href="/solutions/exchanges" className="cardinal-card"><div className="cardinal-card-title">Exchanges</div><div className="cardinal-card-copy">Decisioning before outbound withdrawals.</div></a>
+        <a href="/solutions/wallet-providers" className="cardinal-card"><div className="cardinal-card-title">Wallet providers</div><div className="cardinal-card-copy">Explainable checks before signing.</div></a>
+        <a href="/solutions/custodians-vaults" className="cardinal-card"><div className="cardinal-card-title">Custodians & vaults</div><div className="cardinal-card-copy">Policy before institutional HSM or MPC signing.</div></a>
+        <a href="/solutions/rwa-tokenisation" className="cardinal-card"><div className="cardinal-card-title">RWA & tokenisation</div><div className="cardinal-card-copy">Issuance, redemption and transfer protection.</div></a>
+        <a href="/solutions/real-estate-high-value-payments" className="cardinal-card"><div className="cardinal-card-title">Real estate & high-value payments</div><div className="cardinal-card-copy">Protected settlement for large, one-off transfers.</div></a>
       </div>
     </div>
   </section>
 
-  <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-    <div className="grid gap-12 lg:grid-cols-2">
-      <div><div className="text-xs font-semibold uppercase tracking-wider text-[#5ECBE6]">Trust by design</div><h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">A control layer—not another custodian.</h2><p className="mt-4 text-gray-400">Cardinal is non-custodial, never requests private keys or seed phrases, and returns decisions your platform can explain and enforce.</p><a href="/trust/security-controls" className="mt-6 inline-block font-semibold text-[#5ECBE6] no-underline">Review security and controls →</a></div>
+  <section className="cardinal-section cardinal-section-alt">
+    <div className="cardinal-shell cardinal-trust">
+      <div><div className="cardinal-kicker">Trust by design</div><h2 className="cardinal-h2">A control layer—not another custodian.</h2><p className="cardinal-copy">Cardinal is non-custodial, never requests private keys or seed phrases, and returns decisions your platform can explain and enforce.</p><a href="/trust/security-controls" className="cardinal-card-link">Review security and controls →</a></div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-5"><div className="font-semibold text-white">Non-custodial</div><div className="mt-2 text-sm text-gray-400">No possession of customer assets or keys.</div></div>
-        <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-5"><div className="font-semibold text-white">Explainable</div><div className="mt-2 text-sm text-gray-400">A reason is returned with the decision.</div></div>
-        <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-5"><div className="font-semibold text-white">Complementary</div><div className="mt-2 text-sm text-gray-400">KYC, AML, sanctions, custody and legal controls remain required.</div></div>
-        <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-5"><div className="font-semibold text-white">Partner enforced</div><div className="mt-2 text-sm text-gray-400">ALLOW is not a guarantee; partner controls must also pass.</div></div>
+      <div className="cardinal-grid" style={{marginTop:0}}>
+        <div className="cardinal-card"><div className="cardinal-card-title" style={{marginTop:0}}>Non-custodial</div><div className="cardinal-card-copy">No possession of customer assets or keys.</div></div>
+        <div className="cardinal-card"><div className="cardinal-card-title" style={{marginTop:0}}>Complementary</div><div className="cardinal-card-copy">KYC, AML, sanctions, custody and legal controls remain required.</div></div>
+        <div className="cardinal-card"><div className="cardinal-card-title" style={{marginTop:0}}>Partner enforced</div><div className="cardinal-card-copy">ALLOW is not a guarantee; partner controls must also pass.</div></div>
       </div>
     </div>
   </section>
 
-  <section className="border-t border-white/10">
-    <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-      <div className="rounded-2xl border border-[#5ECBE6]/25 bg-[#5ECBE6]/5 p-8 md:p-12">
-        <div className="grid items-end gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2"><div className="text-xs font-semibold uppercase tracking-wider text-[#5ECBE6]">Design-partner pilot</div><h2 className="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">Start with one high-value transaction workflow.</h2><p className="mt-4 max-w-2xl text-gray-400">A typical pilot runs for 60 to 90 days. Scope, success measures, support and commercial terms are agreement-specific.</p></div>
-          <div className="flex flex-wrap gap-3 lg:justify-end"><a href="/contact/discuss-a-pilot" className="rounded-lg bg-[#5ECBE6] px-5 py-3 font-semibold text-[#111318] no-underline">Discuss a pilot</a><a href="/pilot/overview" className="rounded-lg border border-white/15 px-5 py-3 font-semibold text-white no-underline">Pilot programme</a></div>
-        </div>
+  <section className="cardinal-section">
+    <div className="cardinal-shell">
+      <div className="cardinal-cta">
+        <div className="cardinal-kicker">Design-partner pilot</div>
+        <h2 className="cardinal-h2" style={{marginLeft:"auto",marginRight:"auto"}}>Start with one high-value transaction workflow.</h2>
+        <p className="cardinal-copy" style={{marginLeft:"auto",marginRight:"auto"}}>A typical pilot runs for 60 to 90 days. Scope, success measures, support and commercial terms are agreement-specific.</p>
+        <div className="cardinal-actions"><a href="/contact/discuss-a-pilot" className="cardinal-button cardinal-button-primary">Discuss a pilot</a><a href="/pilot/overview" className="cardinal-button cardinal-button-secondary">Pilot programme</a></div>
       </div>
     </div>
   </section>
