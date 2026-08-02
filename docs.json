@@ -1,72 +1,120 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mintlify Starter Kit",
+  "theme": "luma",
+  "name": "Cardinal",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#1be49c",
+    "light": "#0c8c5c",
+    "dark": "#0c0c0c"
   },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
+  "favicon": "https://media.brand.dev/483ee27f-08fb-4d32-842d-86b4c40f9fb4.png",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "https://media.brand.dev/07fcb57b-76a5-49f6-abdb-740da69c791f.svg",
+    "dark": "https://media.brand.dev/07fcb57b-76a5-49f6-abdb-740da69c791f.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "label": "Cardinal App",
+      "href": "https://app.cardinalweb3.com"
     }
   },
-  "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "product-status"
+            ]
+          },
+          {
+            "group": "Products",
+            "pages": [
+              "products/protection-api",
+              "products/safesend",
+              "products/escrow"
+            ]
+          },
+          {
+            "group": "Integration Guides",
+            "pages": [
+              "guides/integration-overview",
+              "guides/wallet-integration",
+              "guides/exchange-integration",
+              "guides/custodian-vault-integration",
+              "guides/rwa-high-value-payments"
+            ]
+          },
+          {
+            "group": "Security & Operations",
+            "pages": [
+              "security/best-practices",
+              "security/decision-enforcement",
+              "security/audit-logging"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "resources/pilot-onboarding",
+              "resources/faq",
+              "resources/support",
+              "resources/changelog"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/overview",
+              "api-reference/authentication",
+              "api-reference/rate-limits",
+              "api-reference/errors"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/check-transaction",
+              "api-reference/health"
+            ]
+          },
+          {
+            "group": "Smart Contracts",
+            "pages": [
+              "api-reference/safesend-contract",
+              "api-reference/escrow-contract",
+              "api-reference/multisig-escrow-contract"
+            ]
+          }
+        ]
+      }
     ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/Cardinal-Web3"
     }
-  }
+  },
+  "anchors": [
+    {
+      "name": "Cardinal App",
+      "icon": "browser",
+      "url": "https://app.cardinalweb3.com"
+    },
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/Cardinal-Web3"
+    }
+  ]
 }

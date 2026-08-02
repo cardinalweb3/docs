@@ -1,0 +1,140 @@
+---
+title: "Exchange Integration: Protect Withdrawals with Cardinal"
+sidebarTitle: "Exchanges"
+description: "Place an explainable Cardinal decision point before every withdrawal — apply ALLOW, REVIEW, or BLOCK to protect transfers before signing or broadcast."
+---
+
+Cardinal helps exchanges place an explainable decision point immediately before value moves. Submit the final withdrawal intent to the Protection API, apply your exchange policy to the returned `ALLOW`, `REVIEW`, or `BLOCK` decision, and route the transfer through the appropriate settlement path. The risk check must happen after the withdrawal intent is final but before signing or broadcasting the transaction.
+
+<Warning>
+  Cardinal is pilot-ready, but this guide does not represent unrestricted production or mainnet approval. SafeSend is currently a connected Arbitrum Sepolia testnet MVP. Programmable Escrow remains in final testing and security hardening.
+</Warning>
+
+## Recommended architecture
+
+Keep Cardinal behind your exchange backend. Never expose a partner API key in a browser or mobile client.
+
+1. The customer confirms the recipient, network, asset, and amount.
+2. Your withdrawal service completes authentication and internal policy checks.
+3. A server-side Cardinal adapter submits the canonical transaction intent.
+4. Your policy engine combines Cardinal's decision with account, velocity, destination, and operational controls.
+5. The withdrawal is allowed, paused for review, routed to a protected settlement flow, or blocked.
+6. Your exchange records the final transaction hash and settlement outcome.
+
+<Note>
+  Call Cardinal after the withdrawal intent is final, but before signing or broadcasting the transaction. Never call Cardinal speculatively or with placeholder values.
+</Note>
+
+## Submit the withdrawal intent
+
+Use the Protection API endpoint with the following required fields: `from`, `to`, `chain`, `token`, and `amount`. Include `transaction_type`, `contract_address`, `contract_verified`, `approval_amount`, and `permissions` when they describe the proposed action.
+
+```bash
+curl -X POST "$CARDINAL_API_URL/api/check-transaction" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $CARDINAL_API_KEY" \
+  -d '{
+    "from": "0xExchangeHotWallet",
+    "to": "0xCustomerDestination",
+    "chain": "arbitrum",
+    "token": "USDC",
+    "amount": "2500",
+    "transaction_type": "transfer"
+  }'
+```
+
+Each request represents one transaction intent. Do not assume a public batch-withdrawal endpoint, webhook, or asynchronous callback unless your partner agreement explicitly includes it.
+
+## Map decisions into exchange policy
+
+| Decision | Exchange Action |
+|---|---|
+| ALLOW | Normal withdrawal path — continue only if all exchange controls also pass |
+| REVIEW | Pause automatic settlement — warn the user, require acknowledgement, or escalate to operations |
+| BLOCK | Prevent signing — do not process the withdrawal, record findings for investigation |
+
+Your exchange may apply stricter controls than Cardinal returns. It must never weaken a `BLOCK` decision or silently convert an unavailable or error response into `ALLOW`.
+
+## Re-check rules
+
+Run a new Cardinal check whenever any of the following changes after the initial check:
+
+- Recipient address
+- Network or chain
+- Token or amount
+- Contract address
+- Approval amount or permissions
+- Settlement method
+
+Define a partner-specific freshness window for queued withdrawals. If a decision expires before signing or broadcasting, re-submit the final intent.
+
+## Protected settlement routes
+
+A Cardinal decision can inform more than a binary allow-or-block control. Match the route to the decision and your operational policy:
+
+- **Direct settlement** — use only when Cardinal and all exchange policies allow the withdrawal.
+- **SafeSend** — route eligible pilot transfers through a delay or cancellation-window flow. The verified integration is currently on Arbitrum Sepolia testnet.
+- **Programmable Escrow** — use for agreed pilot workflows requiring release conditions, cancellation, or further approval. Escrow is not audited or unrestricted mainnet infrastructure.
+- **Manual or multisig approval** — require an operator or additional signer before settlement proceeds.
+
+The exact route remains an exchange policy decision. Confirm contract addresses, fee configuration, supported production networks, and audit status in your partner implementation plan before routing live value.
+
+## Audit trail
+
+Store enough information to reconstruct every decision:
+
+| Field | Purpose |
+|---|---|
+| Exchange withdrawal ID | Link the Cardinal check to the internal withdrawal record |
+| Cardinal `request_id` | Trace the specific API call |
+| Canonical recipient, network, token, amount, transaction type | Prove what was evaluated |
+| Cardinal decision and findings | Record the returned verdict and reasons |
+| Exchange policy result and selected settlement route | Record any stricter partner-side decision |
+| Customer acknowledgement or manual-review outcome | Evidence of `REVIEW` acceptance |
+| Signing time, transaction hash, and final status | Join the off-chain decision to the on-chain result |
+| Re-check history | Track changes and expired decisions |
+
+Avoid logging the API key, authentication secrets, full session tokens, or unnecessary customer data.
+
+## Error, timeout, and rate-limit handling
+
+Treat protection as a hard control boundary:
+
+- Use short, bounded timeouts and controlled retries.
+- Apply exponential backoff to `429` responses.
+- Do not retry validation or authentication failures without correcting the request.
+- Queue or pause the withdrawal if Cardinal is unavailable.
+- Never default to `ALLOW`, use mock data, or bypass the check silently.
+- Alert operations when failures cross your agreed error threshold.
+
+<Note>
+  Cardinal provides pre-transaction decisioning and deterministic risk checks for the submitted intent. It is not a complete AML, KYT, sanctions, or stolen-funds screening system. Incoming-funds analysis, source-of-funds tracing, illicit-exposure detection, and sanctions screening are roadmap capabilities. Your exchange remains responsible for all regulatory, AML, customer due diligence, and jurisdictional obligations.
+</Note>
+
+## Pilot checklist
+
+Before enabling a live exchange flow, confirm each of the following:
+
+- [ ] Agree on the withdrawal types, assets, networks, and value limits included in the pilot.
+- [ ] Keep the API key in a secret manager and rotate it under an agreed procedure.
+- [ ] Validate request and response schemas in a non-production environment.
+- [ ] Test `ALLOW`, `REVIEW`, `BLOCK`, timeout, `429`, and unavailable-service paths end to end.
+- [ ] Confirm re-check and decision-expiry rules with your team.
+- [ ] Verify operator escalation procedures and customer-facing messaging.
+- [ ] Reconcile Cardinal `request_id` values with withdrawal IDs and transaction hashes.
+- [ ] Confirm SafeSend or Escrow contract addresses, audit status, fees, and network readiness separately.
+- [ ] Complete exchange security, legal, AML, and jurisdiction-specific review.
+- [ ] Set measurable acceptance criteria for decision quality, latency, and operational handling.
+
+<Tip>
+  Start with a narrow pre-withdrawal pilot — one network, a small asset set, explicit value limits, and manual review for all `REVIEW` decisions. Expand only after decision quality, latency, operational handling, and settlement reconciliation meet your agreed acceptance criteria.
+</Tip>
+
+<CardGroup cols={2}>
+  <Card title="Integration Overview" icon="code-branch" href="/guides/integration-overview">
+    Review the full five-step Cardinal control sequence.
+  </Card>
+  <Card title="Protection API" icon="shield-check" href="/products/protection-api">
+    Explore request and response fields for the check-transaction endpoint.
+  </Card>
+</CardGroup>

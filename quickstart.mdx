@@ -1,47 +1,110 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Protection API Quickstart: Your First Risk Check"
+sidebarTitle: "Quickstart"
+description: "Set up your environment, make your first check-transaction call, and handle ALLOW, REVIEW, and BLOCK decisions in under 10 minutes."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
+Use the Cardinal Protection API to evaluate transaction intent before your wallet or application asks a user to sign. This guide walks you through setting up your credentials, making your first `check-transaction` call, and routing your application based on the response.
 
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+<Warning>
+  The Protection API is currently available as a controlled pilot for sandbox integrations and approved partners. Your Cardinal onboarding contact will provide your API host and credentials. Do not use demo credentials in a production environment.
+</Warning>
 
 ## Prerequisites
 
-Before you begin, you must have:
+Before you begin, make sure you have the following:
 
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+- A **Cardinal pilot API key**, provided during onboarding
+- The **API base URL** supplied by your Cardinal onboarding contact
+- A transaction intent containing a sender address, recipient address, chain, token, and amount
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Set up your environment variables">
+    Store the values supplied during onboarding as environment variables. Never expose your API key in frontend code, browser storage, public repositories, or application logs.
 
     ```bash
-    npm install your-package
+    export CARDINAL_API_URL="https://<your-cardinal-api-host>"
+    export CARDINAL_API_KEY="<your-pilot-api-key>"
     ```
+
+    All subsequent examples in this guide read from these two variables.
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+
+  <Step title="Make your first check-transaction call">
+    Call the protection endpoint before requesting a wallet signature, token approval, or contract transaction. Submit the proposed transaction fields in the request body.
 
     ```bash
-    your-cli init
+    curl -X POST "$CARDINAL_API_URL/api/check-transaction" \
+      -H "Content-Type: application/json" \
+      -H "x-api-key: $CARDINAL_API_KEY" \
+      -d '{
+        "from_address": "0xYourWalletAddress",
+        "to_address": "0xRecipientAddress",
+        "chain": "arbitrum",
+        "token": "USDC",
+        "amount": 5000
+      }'
     ```
+
+    The required request fields are:
+
+    | Field | Type | Description |
+    | --- | --- | --- |
+    | `from_address` | string | Sender wallet address |
+    | `to_address` | string | Recipient wallet address |
+    | `chain` | string | Chain slug (e.g. `arbitrum`, `ethereum`) |
+    | `token` | string | Token symbol (e.g. `USDC`, `ETH`) |
+    | `amount` | number | Proposed transfer amount |
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
 
-    ```bash
-    your-cli start
+  <Step title="Handle the response">
+    A successful check returns a stable decision shape. Use `recommended_action` to route your application — it will always be `ALLOW`, `REVIEW`, or `BLOCK`.
+
+    ```json
+    {
+      "request_id": "req_abc123",
+      "risk_score": 18,
+      "risk_level": "LOW",
+      "network_valid": true,
+      "warnings": [],
+      "findings": [],
+      "recommended_action": "ALLOW",
+      "checked_at": "2026-08-02T10:00:00.000Z"
+    }
     ```
+
+    Route your application based on the `recommended_action` value:
+
+    | Decision | Application behaviour |
+    | --- | --- |
+    | `ALLOW` | Continue to the protected signature or contract flow |
+    | `REVIEW` | Display the `findings` array and require explicit user acknowledgement before continuing |
+    | `BLOCK` | Stop the protected flow immediately — do not allow the user to proceed |
+
+    <Info>
+      Treat `risk_score` as the summary, `findings` as the reasons, and `recommended_action` as the authoritative decision. Do not build application logic from the numeric score alone.
+    </Info>
+  </Step>
+
+  <Step title="Never bypass a BLOCK decision">
+    A `BLOCK` response means Cardinal's risk engine has determined the transaction carries unacceptable risk. Your integration must halt the protected flow when it receives this decision — no silent fallbacks, no user-facing overrides.
+
+    The safe execution sequence for every protected transaction is:
+
+    ```text
+    Compose transaction intent
+    → POST /api/check-transaction
+    → Display ALLOW, REVIEW, or BLOCK to the user
+    → Continue only for ALLOW or an explicitly acknowledged REVIEW
+    → Stop for BLOCK
+    ```
+
+    <Note>
+      If the Protection API is unavailable or returns an unexpected error, treat the failure as a `BLOCK` and show a real error message. A live integration must never silently fall back to mock data or allow the transaction to proceed unchecked.
+    </Note>
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
-
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+<Card title="Explore the full Protection API" icon="shield-check" href="/products/protection-api">
+  Review the complete endpoint reference, full response model, supported chains and tokens, and current pilot limitations.
+</Card>

@@ -1,0 +1,205 @@
+---
+title: "Security Best Practices for Cardinal Integrations"
+sidebarTitle: "Best Practices"
+description: "Protect your Cardinal integration with secure API key handling, canonical intent building, wallet safety, approval controls, and incident response."
+---
+
+Cardinal adds a critical security decision point before any blockchain transaction is signed or value moves. A robust integration layers Cardinal's `ALLOW`, `REVIEW`, and `BLOCK` decisions on top of your own authentication, approval, signing, and operational controls — none of these replace the others.
+
+<Warning>
+Cardinal reduces transaction risk but cannot guarantee complete protection. Your organisation remains responsible for key management, identity and access management, KYC and AML obligations, legal and regulatory review, contract verification, monitoring, incident response, and the final decision to sign or release funds.
+</Warning>
+
+## Keep Your API Key Server-Side
+
+Your Cardinal API key grants access to the Protection API. Exposing it in a browser, mobile app, public repository, or log file gives anyone who finds it the ability to impersonate your integration or exhaust your quota.
+
+Never embed your API key in:
+
+- Client-side JavaScript or TypeScript bundles
+- Native mobile app binaries or configuration files
+- Public or private source repositories (checked-in `.env` files count)
+- Log output, error messages, or support tickets
+
+Instead, follow these practices:
+
+- **Call Cardinal from your backend only.** Use a trusted server or protected serverless function as the sole caller.
+- **Store keys in a secret manager.** Use AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault, or an equivalent — not plain environment files.
+- **Apply least-privilege scopes.** Issue each service identity only the permissions it needs; separate development, staging, and production credentials.
+- **Rotate keys on a schedule** and immediately after any suspected exposure.
+- **Remove access promptly** when a person, service, or integration no longer requires it.
+
+```bash
+# Correct: API key resolves from the environment at runtime on your backend
+curl --request POST \
+  --url https://api.cardinalweb3.com/api/check-transaction \
+  --header "Content-Type: application/json" \
+  --header "X-API-Key: $CARDINAL_API_KEY" \
+  --data '{
+    "from": "0xYourSenderAddress",
+    "to": "0xRecipientAddress",
+    "chain": "arbitrum",
+    "token": "USDC",
+    "amount": "2500",
+    "transaction_type": "transfer"
+  }'
+```
+
+<Note>
+The `$CARDINAL_API_KEY` variable must resolve only inside your backend runtime. Never hard-code its value or expose it to the browser.
+</Note>
+
+## Build a Canonical Intent
+
+Cardinal's decision is only as reliable as the intent you submit. The request you send must represent the exact action the signer will authorise — nothing more, nothing less.
+
+A canonical intent includes every security-relevant field:
+
+- Sender address
+- Recipient address
+- Network / chain
+- Token and contract address
+- Amount
+- Transaction type
+- Approval scope or permission set
+- Internal transaction reference
+
+Serialise these fields deterministically (consistent key ordering, no floating-point ambiguity), compute a hash of the serialised payload, and store that hash alongside every Cardinal decision record.
+
+<Warning>
+Re-run the Cardinal check whenever **any** security-relevant field changes — including recipient, amount, chain, token, contract address, or approval scope. Never reuse a decision for a modified intent.
+</Warning>
+
+By binding the hash to every downstream step — user confirmation, business approval, Cardinal result, and final signed transaction — you create an auditable chain of custody that proves the signed transaction matches the evaluated intent.
+
+## Wallet Safety
+
+Cardinal is designed as non-custodial infrastructure. Users and authorised operators retain full control of their wallets and signing keys. Your integration should reinforce that model.
+
+<CardGroup cols={2}>
+  <Card title="Seed Phrase Policy" icon="ban">
+    Never request, collect, transmit, or store a seed phrase or raw private key — under any circumstance or support scenario.
+  </Card>
+  <Card title="Hardware Wallets" icon="microchip">
+    Recommend hardware wallets for large or long-term holdings. The signing key never leaves the device.
+  </Card>
+  <Card title="Multisig for Treasury" icon="shield-halved">
+    Use multisignature wallets for treasury and high-value actions. No single key should control significant funds.
+  </Card>
+  <Card title="Address Allowlists" icon="list-check">
+    Apply address allowlists and value limits where practical. Restrict which destinations can receive funds from your integration.
+  </Card>
+</CardGroup>
+
+Additionally:
+
+- Require **explicit user confirmation** for every signature — never auto-sign.
+- **Warn clearly** when a transaction requests unlimited token approvals or an unexpectedly broad permission scope.
+- Treat a connected wallet address as a signing identifier, not as proof of legal identity or organisational authority.
+
+## Approval Controls
+
+Cardinal's decision is one input into your approval workflow, not a substitute for it. Structure your approval process so that authority is distributed and no single actor can unilaterally move funds.
+
+Strong approval controls include:
+
+- **Separate initiator and approver roles.** The person who creates a transaction should not be the same person who authorises it.
+- **Require additional approval for `REVIEW` decisions.** A `REVIEW` result means Cardinal found something worth human scrutiny — your policy should enforce a second sign-off.
+- **Use multisig thresholds** for treasury and high-value transfers.
+- **Time-limit approvals.** An approval granted today should not be valid indefinitely — apply a freshness window and require reapproval after intent changes.
+- **No self-approval** for high-value releases. Enforce this in your access control layer.
+
+<Note>
+Cardinal does not determine whether a person has legal or organisational authority to approve a transaction. Maintain that mapping in your own identity and access management systems.
+</Note>
+
+## API Resilience
+
+Your integration must handle Cardinal API errors, slow responses, and temporary unavailability gracefully — and always in a way that protects users.
+
+<Steps>
+  <Step title="Set bounded timeouts">
+    Choose a timeout appropriate to your transaction flow (for example, 5–10 seconds). Do not block indefinitely waiting for a response.
+  </Step>
+  <Step title="Retry with exponential backoff">
+    On transient failures (network errors, 5xx responses), retry using exponential backoff with jitter. Limit the total number of attempts.
+  </Step>
+  <Step title="Make retries idempotent">
+    Include the same internal transaction reference on each retry attempt so you can deduplicate decisions and prevent double-signing.
+  </Step>
+  <Step title="Queue on unavailability">
+    If Cardinal is unavailable and the transaction cannot be safely deferred, queue it for later rather than proceeding without a check.
+  </Step>
+  <Step title="Fail closed">
+    Treat any error, timeout, or unavailability as a `BLOCK`. Never substitute a mock, cached, or default `ALLOW` decision.
+  </Step>
+</Steps>
+
+<Warning>
+Never silently downgrade an error to an `ALLOW`. Failing open — proceeding with a transaction when the Cardinal check could not complete — is the most dangerous failure mode in any risk-gating system.
+</Warning>
+
+## Environment Separation
+
+Run Cardinal checks in a dedicated environment for each stage of your delivery pipeline. Mixing credentials or data across environments undermines the integrity of both your testing and your production operations.
+
+| Control | Development | Staging / Pilot | Production |
+|---|---|---|---|
+| Credentials | Dedicated non-production key | Dedicated pilot key | Dedicated production key |
+| Networks | Local or approved testnets | Approved testnet or limited pilot network | Approved production networks only |
+| Assets | Test assets | Explicitly limited assets and values | Approved assets and value limits |
+| Access | Developer roles | Named pilot operators | Least-privilege production roles |
+| Monitoring | Debug-focused | Full workflow validation | Continuous security monitoring |
+
+<Warning>
+Never copy production API keys, wallet secrets, or personal data into a lower environment.
+</Warning>
+
+## Deployment Checklist
+
+Before you promote your Cardinal integration to production, verify every item below.
+
+- [ ] API key stored in secret manager, not in code or env files checked into version control
+- [ ] Cardinal API called server-side only
+- [ ] All `BLOCK` decisions prevent signing
+- [ ] `REVIEW` decisions require explicit user acknowledgment
+- [ ] Canonical intent hashed and stored with each decision record
+- [ ] Decision evidence stored with transaction record
+- [ ] Error / timeout treated as `BLOCK`
+- [ ] Rate limit handling and backoff implemented
+- [ ] Pilot scope defined and not exceeded
+- [ ] Security incident response procedure documented
+- [ ] Team trained on decision meanings and override procedures
+- [ ] Support contact on file: [contact@cardinalweb3.com](mailto:contact@cardinalweb3.com)
+
+## Incident Response
+
+If you suspect credential exposure, transaction tampering, unauthorised access, or contract risk, act immediately and methodically.
+
+<Steps>
+  <Step title="Pause the affected integration">
+    Suspend the affected transaction route or integration before investigating. Stopping further harm takes priority over diagnosis.
+  </Step>
+  <Step title="Revoke or rotate credentials">
+    Invalidate the exposed API key and issue a replacement. Do this even if exposure is only suspected.
+  </Step>
+  <Step title="Preserve evidence">
+    Capture logs, Cardinal `request_id` values, intent hashes, transaction hashes, and approval records. Do not modify or delete anything.
+  </Step>
+  <Step title="Identify the blast radius">
+    Determine which users, assets, networks, and time windows were potentially affected.
+  </Step>
+  <Step title="Stop automated releases">
+    Halt any automated approval or settlement processes that could continue executing during the incident.
+  </Step>
+  <Step title="Follow your response procedures">
+    Invoke your organisation's incident-response, legal, compliance, notification, and recovery runbooks.
+  </Step>
+  <Step title="Contact Cardinal">
+    Reach the Cardinal team at [contact@cardinalweb3.com](mailto:contact@cardinalweb3.com) with non-secret diagnostic information: `request_id` values, timestamps, and a description of the suspected issue.
+  </Step>
+</Steps>
+
+<Warning>
+Never include private keys, seed phrases, passwords, authentication tokens, or live API keys in a support request or incident report.
+</Warning>

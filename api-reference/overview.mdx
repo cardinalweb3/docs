@@ -1,0 +1,54 @@
+---
+title: "Cardinal API Reference: Overview and Base URL"
+sidebarTitle: "Overview"
+description: "Explore the Cardinal Protection API endpoints, base URL, request and response conventions, and links to interactive Swagger documentation."
+---
+
+The Cardinal Protection API gives your application a single, consistent interface for evaluating Web3 transaction risk before a user signs. Every request goes to `https://api.cardinalweb3.com`, accepts a JSON body, and returns a JSON response — making it straightforward to integrate into any server-side stack regardless of language or framework.
+
+## Base URL
+
+All API requests target the following base URL:
+
+```
+https://api.cardinalweb3.com
+```
+
+Set this as an environment variable in your integration so you can switch between sandbox and production without touching your code:
+
+```bash
+export CARDINAL_API_URL="https://api.cardinalweb3.com"
+```
+
+## Available endpoints
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `POST` | `/api/check-transaction` | Core risk evaluation — submit a transaction intent and receive a risk decision |
+| `GET` | `/health` | Liveness check — confirm the API is reachable and healthy |
+| `GET` | `/docs` | Interactive Swagger UI — explore and test endpoints in your browser |
+
+## Request and response conventions
+
+All requests must include a `Content-Type: application/json` header and a JSON request body where applicable. All responses are returned as JSON, including error payloads. Timestamps throughout the API — such as `checked_at` in the check-transaction response — use ISO 8601 format (for example, `2026-08-02T10:00:00.000Z`).
+
+<Note>
+  Interactive Swagger documentation is available at [https://api.cardinalweb3.com/docs](https://api.cardinalweb3.com/docs). You can use it to explore request schemas, inspect response models, and run live test calls directly from your browser.
+</Note>
+
+## Explore the API
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api-reference/authentication">
+    Learn how to obtain and securely use your Cardinal API key.
+  </Card>
+  <Card title="Rate Limits" icon="gauge-high" href="/api-reference/rate-limits">
+    Understand per-key rate limits, response headers, and backoff strategies.
+  </Card>
+  <Card title="Check Transaction" icon="shield-check" href="/api-reference/check-transaction">
+    Full reference for the core POST /api/check-transaction endpoint.
+  </Card>
+  <Card title="Health Endpoint" icon="heart-pulse" href="/api-reference/health">
+    Use the GET /health endpoint to verify API reachability in your monitoring setup.
+  </Card>
+</CardGroup>

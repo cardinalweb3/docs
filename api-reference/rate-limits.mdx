@@ -1,0 +1,67 @@
+---
+title: "Cardinal API Rate Limits: Headers and Backoff Strategy"
+sidebarTitle: "Rate Limits"
+description: "Understand Cardinal's per-key rate limits, read rate-limit response headers, handle HTTP 429 responses, and implement exponential backoff with jitter."
+---
+
+Cardinal enforces rate limits on every API key to ensure fair use and protect the reliability of the service for all integrations. Knowing how to read the rate-limit headers and respond to a `429` response is an essential part of a production-ready integration.
+
+## Default limits
+
+By default, each API key is allowed **300 requests per 60-second rolling window**. This limit is applied per key and per API instance during the current pilot.
+
+## Rate-limit response headers
+
+Every response from the Cardinal API includes the following headers so your application can track its usage in real time:
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Limit` | Your total request allowance for the current window |
+| `X-RateLimit-Remaining` | How many requests you have left before the window resets |
+| `X-RateLimit-Reset` | Unix timestamp (seconds) indicating when the current window expires and your limit refills |
+
+Reading `X-RateLimit-Remaining` on every response lets you throttle proactively rather than waiting for a `429`.
+
+## HTTP 429 — rate limit exceeded
+
+When you exhaust your limit, the API returns an HTTP `429 Too Many Requests` response with the following body:
+
+```json
+{
+  "statusCode": 429,
+  "message": "Rate limit exceeded"
+}
+```
+
+## Handling a 429 response
+
+When you receive a `429`, implement **exponential backoff with jitter** rather than retrying immediately. Check the `X-RateLimit-Reset` header to calculate exactly how long to wait before the next attempt.
+
+The following TypeScript helper retries a failed request up to three times, respecting the reset timestamp and applying exponential backoff:
+
+```typescript
+async function callWithRetry(fn: () => Promise<Response>, maxRetries = 3): Promise<Response> {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await fn();
+    if (response.status === 429) {
+      const resetAt = parseInt(response.headers.get('X-RateLimit-Reset') ?? '0', 10);
+      const delay = Math.max(resetAt * 1000 - Date.now(), 1000 * Math.pow(2, attempt));
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    return response;
+  }
+  // After max retries, treat as BLOCK (fail closed)
+  throw new Error('Rate limit exceeded — treating as BLOCK');
+}
+```
+
+Note that the function throws after exhausting all retries. In a transaction-protection context, an unresolvable `429` must be treated as a `BLOCK` decision — see the [Errors](/api-reference/errors) page for more on the fail-closed rule.
+
+<Tip>
+  During high-volume operations such as batch address screening or bulk transaction processing, queue your requests and dispatch them at a controlled rate rather than fanning out all calls simultaneously. Staying below your `X-RateLimit-Remaining` threshold at all times avoids `429` responses entirely and keeps latency predictable.
+</Tip>
+
+<Note>
+  Per-key rate limits are adjustable. If your integration requires a higher request volume than the default 300 requests per 60-second window, contact Cardinal to discuss an increase for your pilot key.
+</Note>

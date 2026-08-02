@@ -1,0 +1,128 @@
+{
+  "projectType": "saas",
+  "projectName": "Cardinal",
+  "projectDescription": "Cardinal is a Web3 transaction protection platform that evaluates transaction intent before wallet signing, returning ALLOW, REVIEW, or BLOCK decisions to prevent on-chain fraud and irreversible losses.",
+  "theme": "luma",
+  "primaryColor": "#1be49c",
+  "lightColor": "#0c8c5c",
+  "darkColor": "#0c0c0c",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "product-status"
+            ]
+          },
+          {
+            "group": "Products",
+            "pages": [
+              "products/protection-api",
+              "products/safesend",
+              "products/escrow"
+            ]
+          },
+          {
+            "group": "Integration Guides",
+            "pages": [
+              "guides/integration-overview",
+              "guides/wallet-integration",
+              "guides/exchange-integration",
+              "guides/custodian-vault-integration",
+              "guides/rwa-high-value-payments"
+            ]
+          },
+          {
+            "group": "Security & Operations",
+            "pages": [
+              "security/best-practices",
+              "security/decision-enforcement",
+              "security/audit-logging"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "resources/pilot-onboarding",
+              "resources/faq",
+              "resources/support",
+              "resources/changelog"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/overview",
+              "api-reference/authentication",
+              "api-reference/rate-limits",
+              "api-reference/errors"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/check-transaction",
+              "api-reference/health"
+            ]
+          },
+          {
+            "group": "Smart Contracts",
+            "pages": [
+              "api-reference/safesend-contract",
+              "api-reference/escrow-contract",
+              "api-reference/multisig-escrow-contract"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Pre-signature transaction risk evaluation returning ALLOW, REVIEW, or BLOCK decisions",
+    "5-layer risk engine: network validation, scam feed checks, wallet intelligence, contract analysis, and simulation",
+    "Risk scoring 0–100 with LOW/MEDIUM/HIGH/CRITICAL levels and detailed findings",
+    "SafeSend: time-locked ERC20 transfers with a cancellation window on Arbitrum Sepolia",
+    "Programmable Escrow: buyer/seller escrow with acceptance deadlines, dispute resolution, and automatic fee handling",
+    "Multisig Escrow: threshold-gated fund release requiring multiple approver signatures",
+    "API key authentication with per-key rate limits and scoped permissions",
+    "Supported chains: Ethereum, BNB, Polygon, Base, Arbitrum, Optimism, Solana",
+    "Fail-closed architecture: errors default to blocking rather than allowing",
+    "Full audit trail: canonical intent hashing, request IDs, decision evidence storage"
+  ],
+  "publicApiSurface": [
+    "POST /api/check-transaction — core risk-check endpoint returning risk_score, risk_level, findings, recommended_action",
+    "GET /health — liveness check returning {status, service}",
+    "GET /docs — Swagger/OpenAPI interactive documentation",
+    "SafeSend.createSafeSend(recipient, token, amount, releaseTime)",
+    "SafeSend.cancelSafeSend(transferId)",
+    "SafeSend.releaseSafeSend(transferId)",
+    "SafeSend.getSafeSend(transferId)",
+    "SafeSend.previewFee(amount)",
+    "Escrow.createEscrow(seller, token, amount, acceptanceDeadline)",
+    "Escrow.acceptEscrow(escrowId)",
+    "Escrow.releaseEscrow(escrowId)",
+    "Escrow.refundEscrow(escrowId)",
+    "Escrow.claimEscrow(escrowId)",
+    "Escrow.disputeEscrow(escrowId)",
+    "Escrow.resolveDispute(escrowId, releaseToSeller)",
+    "Escrow.getEscrow(escrowId)",
+    "Escrow.previewFee(amount)",
+    "MultisigEscrow.createMultisigEscrow(seller, token, amount, acceptanceDeadline)",
+    "MultisigEscrow.acceptMultisigEscrow(escrowId)",
+    "MultisigEscrow.approveRelease(escrowId)",
+    "MultisigEscrow.releaseMultisigEscrow(escrowId)",
+    "MultisigEscrow.refundMultisigEscrow(escrowId)",
+    "MultisigEscrow.getMultisigEscrow(escrowId)",
+    "MultisigEscrow.hasApprovedRelease(escrowId, approver)"
+  ]
+}

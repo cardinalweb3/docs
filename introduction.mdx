@@ -1,0 +1,59 @@
+---
+title: "Introduction to Cardinal: Web3 Transaction Protection"
+sidebarTitle: "Introduction"
+description: "Cardinal evaluates transaction intent before wallet signing, returning ALLOW, REVIEW, or BLOCK decisions to protect users from on-chain fraud."
+---
+
+Cardinal is the trust and protection layer for digital asset transactions. It sits between a composed transaction and the wallet signature request, evaluating risk across multiple signal layers and returning a clear, explainable decision — so your application can act before value moves rather than after a loss has occurred.
+
+## The ALLOW / REVIEW / BLOCK decision model
+
+Every call to the Cardinal Protection API returns one of three recommended actions. Your application routes the user based on that decision.
+
+| Decision | Meaning | Application behaviour |
+| --- | --- | --- |
+| `ALLOW` | Risk is within acceptable bounds | Continue to the protected signature or contract flow |
+| `REVIEW` | One or more risk signals require user attention | Surface the findings and require explicit acknowledgement before continuing |
+| `BLOCK` | Risk is high enough to stop the transaction | Halt the protected flow immediately — do not proceed |
+
+The response also includes a numeric `risk_score`, a `risk_level` classification, and a `findings` array that explains what triggered the decision. Build your application logic from `recommended_action`, not from the score alone.
+
+## The 5-layer risk engine
+
+Cardinal evaluates each transaction across five independent signal layers before producing a decision.
+
+1. **Network validation** — Confirms the target chain is active and the transaction is well-formed.
+2. **Scam and fraud checks** — Cross-references recipient addresses and contract identifiers against known scam datasets and community threat signals.
+3. **Wallet intelligence** — Analyses the behavioural and reputational history of both the sender and recipient wallets.
+4. **Contract analysis** — Inspects contract verification status, permission scope, and known risk patterns for contract interactions.
+5. **Simulation** — Models the expected on-chain outcome of the transaction to surface unexpected state changes or value drains before signing.
+
+Each layer contributes to the final `risk_score`. The `findings` array in the response maps individual signals back to the layers that produced them, giving your users a clear explanation of the risk.
+
+## Built for digital finance platforms
+
+Cardinal is designed for teams that move digital asset value on behalf of users and need protection that operates at the point of intent — before a signature, not after a loss.
+
+- **Wallets** — Protect every send, swap, and contract interaction before the user signs.
+- **Exchanges and custodians** — Screen withdrawals and transfers before they leave the platform.
+- **Payment platforms** — Validate recipient addresses and chain state before initiating settlement.
+- **Marketplaces** — Evaluate contract interactions and token approvals before execution.
+- **RWA and tokenisation platforms** — Verify on-chain recipients and contract conditions before asset transfer.
+
+## Products
+
+<CardGroup cols={2}>
+  <Card title="Protection API" icon="shield-check" href="/products/protection-api">
+    The core evaluation engine. Submit a transaction intent and receive an explainable ALLOW, REVIEW, or BLOCK decision.
+  </Card>
+  <Card title="SafeSend" icon="paper-plane" href="/products/safesend">
+    A guided token transfer flow that runs a Protection API check before requesting wallet approval or contract execution.
+  </Card>
+  <Card title="Programmable Escrow" icon="handshake" href="/products/escrow">
+    Non-custodial settlement with configurable release, refund, timeout, and dispute controls for buyer–seller transactions.
+  </Card>
+</CardGroup>
+
+<Note>
+  Cardinal is currently operating as a connected MVP and controlled pilot. The Protection API is available to approved pilot partners. SafeSend runs on a testnet flow. Mainnet deployment, external audits, and enterprise operations remain subject to final verification. See the [Product Status](/product-status) page for the current state of each capability.
+</Note>

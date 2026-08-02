@@ -1,0 +1,340 @@
+---
+title: "Escrow Smart Contract Reference"
+sidebarTitle: "Escrow Contract"
+description: "Complete reference for the Cardinal Escrow ERC-20 contract: buyer/seller settlement with dispute resolution, timed seller claim, and a platform fee on release."
+---
+
+The Cardinal Escrow contract provides on-chain settlement between a buyer and a seller for higher-value or otherwise irreversible ERC-20 transactions. The buyer locks funds at creation. The seller must accept before a deadline, which starts a release window during which the buyer can release funds or either party can raise a dispute. If the release window passes without action, the seller can claim directly. A designated dispute resolver handles any escalated disputes, directing funds either to the seller or back to the buyer.
+
+<Warning>
+  The Escrow contract is in **final testing and security hardening**. It has not been externally audited and is not approved for unrestricted mainnet use. Cardinal will publish verified deployment details, role owners, dispute operating policy, and security review status before any production launch.
+</Warning>
+
+## Participants
+
+| Participant        | Contract authority                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| Buyer              | Creates and funds escrow, refunds before acceptance, releases accepted escrow, raises a dispute     |
+| Seller             | Accepts before the deadline, raises a dispute, claims after the release window expires              |
+| Dispute Resolver   | Resolves disputed escrows by directing funds to the seller or refunding the buyer                   |
+
+## Lifecycle states
+
+| Status      | Value | Meaning                                                      |
+| ----------- | :---: | ------------------------------------------------------------ |
+| `None`      |   0   | No escrow exists for this ID                                 |
+| `Created`   |   1   | Buyer funds are locked; seller acceptance is pending         |
+| `Accepted`  |   2   | Seller accepted; release window is active                    |
+| `Released`  |   3   | Seller and fee recipient were paid                           |
+| `Refunded`  |   4   | Full amount was returned to the buyer                        |
+| `Disputed`  |   5   | Settlement frozen; awaiting resolver decision                |
+
+**State transitions:**
+
+```
+Created  ──→ Accepted ──→ Released
+   └──────→ Refunded
+
+Accepted ──→ Disputed ──→ Released
+                    └──→ Refunded
+
+Accepted ──→ (release window expires) ──→ Seller claim ──→ Released
+```
+
+`Released` and `Refunded` are terminal states. An escrow in either state cannot be processed again.
+
+## Fees
+
+The platform fee is charged **only on settlement to the seller**. A buyer refund (before acceptance or after a dispute) returns the full locked amount with no fee deducted.
+
+```
+feeAmount = amount × feeBps ÷ 10,000
+```
+
+The default fee is **2% (200 basis points)**. Read the verified deployment configuration rather than hardcoding an illustrative rate — the active rate is environment-specific.
+
+## Release window
+
+The release window is the period after seller acceptance during which the buyer can release funds, and either party can raise a dispute. It is bounded on-chain to a minimum of **1 hour** and a maximum of **30 days**, with a default of **7 days**. The release deadline is stamped at acceptance using the window in effect at that moment; a subsequent change to the global window does not affect already-accepted escrows.
+
+After the release window expires without buyer release or dispute, the seller may call `claimEscrow` directly.
+
+## Functions
+
+### createEscrow
+
+```solidity
+function createEscrow(
+    address seller,
+    address token,
+    uint256 amount,
+    uint256 acceptanceDeadline
+) external returns (uint256 escrowId)
+```
+
+Creates a new escrow and immediately transfers the full `amount` from your wallet into the contract. The platform fee is calculated at creation time and stored with the escrow record.
+
+**Caller:** Buyer
+
+<ParamField path="seller" type="address" required>
+  Wallet address of the counterparty who must accept the escrow. Must be non-zero.
+</ParamField>
+
+<ParamField path="token" type="address" required>
+  ERC-20 token contract address. Must be non-zero.
+</ParamField>
+
+<ParamField path="amount" type="uint256" required>
+  Total token amount to lock. Must be greater than zero. Approve this exact amount before calling — do not use an unlimited approval.
+</ParamField>
+
+<ParamField path="acceptanceDeadline" type="uint256" required>
+  Unix timestamp by which the seller must accept. Must be strictly greater than the current block timestamp.
+</ParamField>
+
+**Returns:** `escrowId` — store this to reference the escrow in all subsequent calls.
+
+**Emits:** `EscrowCreated`
+
+---
+
+### acceptEscrow
+
+```solidity
+function acceptEscrow(uint256 escrowId) external
+```
+
+Accepts the escrow terms and starts the buyer's release window. Only the recorded seller can call this, and only on or before `acceptanceDeadline`. Acceptance stamps a `releaseDeadline` based on the current global release window.
+
+**Caller:** Seller only
+
+<ParamField path="escrowId" type="uint256" required>
+  ID of the escrow to accept. Must be in `Created` status and within the acceptance deadline.
+</ParamField>
+
+**Emits:** `EscrowAccepted`
+
+---
+
+### releaseEscrow
+
+```solidity
+function releaseEscrow(uint256 escrowId) external
+```
+
+Releases funds to the seller and transfers the platform fee to the fee recipient. The buyer may release at any time while the escrow is `Accepted`, including after the release deadline.
+
+**Caller:** Buyer only
+
+<ParamField path="escrowId" type="uint256" required>
+  ID of the escrow to release. Must be in `Accepted` status.
+</ParamField>
+
+**Emits:** `EscrowReleased`
+
+---
+
+### refundEscrow
+
+```solidity
+function refundEscrow(uint256 escrowId) external
+```
+
+Returns the full locked amount to the buyer with no platform fee. Only available before the seller accepts — once the escrow is `Accepted`, the buyer must use `releaseEscrow` or `disputeEscrow` instead.
+
+**Caller:** Buyer only
+
+<ParamField path="escrowId" type="uint256" required>
+  ID of the escrow to refund. Must be in `Created` status.
+</ParamField>
+
+**Emits:** `EscrowRefunded`
+
+---
+
+### claimEscrow
+
+```solidity
+function claimEscrow(uint256 escrowId) external
+```
+
+Allows the seller to claim an accepted, undisputed escrow after the release window expires, preventing an unresponsive buyer from leaving the seller's funds locked indefinitely.
+
+**Caller:** Seller only
+
+<ParamField path="escrowId" type="uint256" required>
+  ID of the escrow to claim. Must be in `Accepted` status, not disputed, and past its `releaseDeadline`.
+</ParamField>
+
+**Emits:** `EscrowReleased`
+
+---
+
+### disputeEscrow
+
+```solidity
+function disputeEscrow(uint256 escrowId) external
+```
+
+Escalates an accepted escrow to `Disputed` status, freezing buyer release and timed seller claim until the resolver acts. Either the buyer or the seller may raise a dispute, but only while the escrow remains within the release window.
+
+**Caller:** Buyer or Seller
+
+<ParamField path="escrowId" type="uint256" required>
+  ID of the escrow to dispute. Must be in `Accepted` status and on or before `releaseDeadline`.
+</ParamField>
+
+**Emits:** `EscrowDisputed`
+
+<Note>
+  `disputeEscrow` can be called even while the contract is paused. This is intentional: blocking a dispute during a pause that spans the release deadline would strip the buyer of their only protection before the seller could claim.
+</Note>
+
+---
+
+### resolveDispute
+
+```solidity
+function resolveDispute(uint256 escrowId, bool releaseToSeller) external
+```
+
+Settles a disputed escrow. Only the configured dispute resolver address may call this function.
+
+**Caller:** Dispute Resolver only
+
+<ParamField path="escrowId" type="uint256" required>
+  ID of the disputed escrow to resolve. Must be in `Disputed` status.
+</ParamField>
+
+<ParamField path="releaseToSeller" type="bool" required>
+  `true` to settle to the seller (platform fee is charged). `false` to refund the buyer in full (no fee charged).
+</ParamField>
+
+**Emits:** `EscrowDisputeResolved` (and either `EscrowReleased` or `EscrowRefunded`)
+
+---
+
+### getEscrow
+
+```solidity
+function getEscrow(uint256 escrowId) external view returns (EscrowTransaction memory)
+```
+
+Returns the full on-chain record for an escrow. Always use this as the source of truth for status and available actions — do not rely on local state alone.
+
+**Caller:** Anyone (view function, no gas cost)
+
+<ParamField path="escrowId" type="uint256" required>
+  ID of the escrow to read.
+</ParamField>
+
+**Returns:** An `EscrowTransaction` struct:
+
+| Field                 | Type            | Description                                                |
+| --------------------- | --------------- | ---------------------------------------------------------- |
+| `buyer`               | `address`       | Wallet that created and funded the escrow                  |
+| `seller`              | `address`       | Counterparty accepting and receiving settlement            |
+| `token`               | `address`       | ERC-20 token locked by the contract                        |
+| `amount`              | `uint256`       | Total amount locked                                        |
+| `feeAmount`           | `uint256`       | Platform fee recorded at creation time                     |
+| `acceptanceDeadline`  | `uint256`       | Latest timestamp for seller acceptance                     |
+| `releaseDeadline`     | `uint256`       | Timestamp after which undisputed seller claim is available |
+| `status`              | `EscrowStatus`  | Current lifecycle state (see statuses above)               |
+
+---
+
+### previewFee
+
+```solidity
+function previewFee(uint256 amount) external view returns (uint256 feeAmount)
+```
+
+Returns the platform fee that would be charged on settlement for a given amount. Call this before creating an escrow to show the buyer and seller the exact fee.
+
+**Caller:** Anyone (view function, no gas cost)
+
+<ParamField path="amount" type="uint256" required>
+  The total token amount you plan to lock.
+</ParamField>
+
+**Returns:** `feeAmount` — the token amount deducted from the settlement on release.
+
+## Events
+
+| Event                    | Parameters                                                                               | When emitted                          |
+| ------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------- |
+| `EscrowCreated`          | `escrowId`, `buyer`, `seller`, `token`, `amount`, `feeAmount`, `acceptanceDeadline`      | Buyer funds a new escrow              |
+| `EscrowAccepted`         | `escrowId`, `seller`, `releaseDeadline`                                                  | Seller accepts; release window starts |
+| `EscrowReleased`         | `escrowId`, `seller`, `sellerAmount`, `feeAmount`                                        | Seller settlement completed           |
+| `EscrowRefunded`         | `escrowId`, `buyer`, `amount`                                                            | Funds returned to buyer               |
+| `EscrowDisputed`         | `escrowId`, `raisedBy`                                                                   | Either party escalates                |
+| `EscrowDisputeResolved`  | `escrowId`, `disputeResolver`, `releasedToSeller`                                        | Resolver settles the dispute          |
+
+## Ethers.js example
+
+The example below shows a complete buyer-to-release flow: approve tokens, create an escrow, wait for seller acceptance, then release funds to the seller.
+
+```typescript
+import { ethers } from 'ethers';
+
+const ESCROW_ABI = [
+  'function createEscrow(address seller, address token, uint256 amount, uint256 acceptanceDeadline) returns (uint256)',
+  'function acceptEscrow(uint256 escrowId)',
+  'function releaseEscrow(uint256 escrowId)',
+  'function refundEscrow(uint256 escrowId)',
+  'function claimEscrow(uint256 escrowId)',
+  'function disputeEscrow(uint256 escrowId)',
+  'function resolveDispute(uint256 escrowId, bool releaseToSeller)',
+  'function getEscrow(uint256 escrowId) view returns (tuple(address buyer, address seller, address token, uint256 amount, uint256 feeAmount, uint256 acceptanceDeadline, uint256 releaseDeadline, uint8 status))',
+  'function previewFee(uint256 amount) view returns (uint256)',
+];
+
+const ERC20_ABI = [
+  'function approve(address spender, uint256 amount) returns (bool)',
+];
+
+const provider = new ethers.BrowserProvider(window.ethereum);
+const signer = await provider.getSigner();
+
+const escrow = new ethers.Contract(ESCROW_CONTRACT_ADDRESS, ESCROW_ABI, signer);
+const token = new ethers.Contract(TOKEN_ADDRESS, ERC20_ABI, signer);
+
+const amount = ethers.parseUnits('5000', 6); // 5,000 USDC
+
+// Preview fee before showing confirmation UI
+const fee = await escrow.previewFee(amount);
+console.log('Fee:', ethers.formatUnits(fee, 6), 'USDC');
+
+// Approve exact amount only
+await (await token.approve(ESCROW_CONTRACT_ADDRESS, amount)).wait();
+
+// Buyer creates the escrow with a 48-hour acceptance deadline
+const acceptanceDeadline = Math.floor(Date.now() / 1000) + 48 * 3600;
+const createTx = await escrow.createEscrow(
+  SELLER_ADDRESS,
+  TOKEN_ADDRESS,
+  amount,
+  acceptanceDeadline
+);
+const receipt = await createTx.wait();
+
+// Parse the escrowId from the EscrowCreated event
+const iface = new ethers.Interface(ESCROW_ABI);
+const createEvent = receipt.logs
+  .map((log) => { try { return iface.parseLog(log); } catch { return null; } })
+  .find((e) => e?.name === 'EscrowCreated');
+
+const escrowId = createEvent?.args.escrowId;
+console.log('Escrow ID:', escrowId.toString());
+
+// --- After seller calls acceptEscrow(escrowId) ---
+
+// Buyer releases funds to the seller
+const releaseTx = await escrow.releaseEscrow(escrowId);
+await releaseTx.wait();
+console.log('Funds released to seller');
+
+// Read final state to confirm
+const record = await escrow.getEscrow(escrowId);
+console.log('Status:', record.status); // 3 = Released
+```

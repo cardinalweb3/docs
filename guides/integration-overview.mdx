@@ -1,0 +1,204 @@
+---
+title: "Cardinal Integration Overview: Protected Transactions"
+sidebarTitle: "Overview"
+description: "Learn how Cardinal evaluates transaction intent before signing and returns ALLOW, REVIEW, or BLOCK decisions to protect every settlement."
+---
+
+Cardinal sits between your application and the blockchain as a pre-signature control layer. Before any token approval, wallet signature, or contract execution occurs, you submit a canonical transaction intent to the Protection API, receive an explainable risk decision, and route settlement accordingly. The result is a consistent, auditable control point across wallets, exchanges, custodians, and high-value payment flows.
+
+<Warning>
+  The Protection API is suitable for sandbox integrations and controlled pilots. SafeSend is a connected testnet MVP on Arbitrum Sepolia, while Programmable Escrow is in final testing and security hardening. Do not route unrestricted mainnet value through a pilot configuration.
+</Warning>
+
+## The protected transaction sequence
+
+Every Cardinal-protected transaction follows the same five-step control sequence, regardless of integration type.
+
+<Steps>
+  <Step title="Create an immutable canonical intent">
+    Build the complete transaction intent before calling Cardinal. The intent you check and the transaction you eventually submit must match exactly. If any protected field changes, generate a new check.
+
+    ```typescript
+    interface CardinalTransactionIntent {
+      from_address: string;
+      to_address: string;
+      chain: string;
+      token: string;
+      amount: number;
+      transaction_type?: string;
+      contract_address?: string;
+      contract_verified?: boolean;
+      approval_amount?: number;
+      permissions?: string[];
+    }
+    ```
+
+    For contract-based settlement, set `to_address` to the economic recipient and `contract_address` to the verified SafeSend or Escrow deployment involved in execution.
+  </Step>
+
+  <Step title="Call Cardinal from your backend">
+    Never put your Cardinal API key in frontend or browser code. Your backend receives the intent from the client, constructs the canonical payload, and calls the Protection API server-side.
+
+    ```typescript
+    export async function checkWithCardinal(intent: CardinalTransactionIntent) {
+      const response = await fetch(
+        `${process.env.CARDINAL_API_URL}/api/check-transaction`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.CARDINAL_API_KEY!,
+          },
+          body: JSON.stringify(intent),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Cardinal protection check failed: ${response.status}`);
+      }
+
+      return response.json();
+    }
+    ```
+
+    Your backend should validate and authenticate the incoming client request before forwarding it to Cardinal. Return only the information needed to render the decision to the frontend.
+  </Step>
+
+  <Step title="Store the decision evidence">
+    A successful response includes a structured risk decision you must persist before proceeding.
+
+    ```json
+    {
+      "request_id": "req_example",
+      "risk_score": 18,
+      "risk_level": "LOW",
+      "network_valid": true,
+      "warnings": [],
+      "findings": [],
+      "recommended_action": "ALLOW",
+      "checked_at": "2026-08-02T10:00:00.000Z"
+    }
+    ```
+
+    Store at minimum the following fields for every check:
+
+    | Field | Why retain it |
+    |---|---|
+    | `request_id` | Trace support and investigation requests |
+    | Canonical intent | Prove what Cardinal evaluated |
+    | `recommended_action` | Record the decision used by the integration |
+    | `risk_score` and `risk_level` | Display and reporting context |
+    | `findings` and `warnings` | Explain review or blocking decisions |
+    | `checked_at` | Establish when the check occurred |
+    | Partner policy result | Record any stricter partner-side decision |
+    | User acknowledgement | Evidence that a `REVIEW` warning was accepted |
+    | Settlement route | Direct, SafeSend, or Escrow |
+    | Transaction hash and final status | Join off-chain decisioning to on-chain outcome |
+
+    Do not store secrets, private keys, seed phrases, or unnecessary personal data alongside this evidence.
+  </Step>
+
+  <Step title="Apply the decision">
+    Use `recommended_action` as the decision, `findings` as the reasons, and `risk_score` as a summary. Do not make settlement decisions from the numeric score alone.
+
+    ```typescript
+    function resolveCardinalDecision(result: {
+      recommended_action: "ALLOW" | "REVIEW" | "BLOCK";
+      findings: unknown[];
+    }) {
+      switch (result.recommended_action) {
+        case "ALLOW":
+          return { mayContinue: true, acknowledgementRequired: false };
+        case "REVIEW":
+          return { mayContinue: false, acknowledgementRequired: true };
+        case "BLOCK":
+          return { mayContinue: false, acknowledgementRequired: false };
+      }
+    }
+    ```
+
+    | Decision | Minimum behaviour |
+    |---|---|
+    | `ALLOW` | Continue only if partner policy also permits the transaction |
+    | `REVIEW` | Display every finding and require explicit, recorded acknowledgement |
+    | `BLOCK` | Stop before approval, signature, or contract execution |
+
+    Your integration may enforce a stricter result than Cardinal returns. It must never silently weaken a `BLOCK` or bypass the acknowledgement requirement for a `REVIEW`.
+  </Step>
+
+  <Step title="Select the settlement route">
+    Route selection combines the Cardinal verdict with your own transaction policy.
+
+    ```typescript
+    function chooseRoute(
+      cardinalAction: "ALLOW" | "REVIEW" | "BLOCK",
+      policy: { requireEscrow: boolean; requireDelay: boolean },
+      reviewAcknowledged: boolean,
+    ) {
+      if (cardinalAction === "BLOCK") return "STOP";
+      if (cardinalAction === "REVIEW" && !reviewAcknowledged) return "STOP";
+      if (policy.requireEscrow) return "ESCROW";
+      if (policy.requireDelay) return "SAFESEND";
+      return "DIRECT";
+    }
+    ```
+
+    | Decision | Settlement Route |
+    |---|---|
+    | ALLOW | Direct transfer |
+    | ALLOW + extra protection | SafeSend (testnet) |
+    | REVIEW | SafeSend or Escrow with user acknowledgement |
+    | BLOCK | Stop — do not proceed |
+
+    This example shows integration structure, not a universal Cardinal routing policy. Define and approve your own thresholds and route requirements for your pilot.
+  </Step>
+</Steps>
+
+## Failure handling
+
+Treat the Protection API as a hard control boundary. Never silently fall back to mock risk data, a default `ALLOW`, an unverified contract address, or a different network.
+
+| Failure | Required response |
+|---|---|
+| Protection API unavailable | Show a real error and stop the protected flow |
+| Missing or invalid API key | Fix backend configuration; never ask the end user for the key |
+| Rate limit exceeded (`429`) | Apply controlled retry with exponential backoff and keep settlement stopped |
+| Wallet on wrong network | Ask the user to switch to the verified environment |
+| User rejects wallet request | Keep the flow incomplete and allow a deliberate retry |
+| Approval fails | Do not submit the settlement call |
+| Settlement transaction fails | Read current allowance and contract state before retrying |
+| Confirmation is delayed | Show pending state without claiming success |
+| Intent changes after check | Invalidate the old decision and run a new check |
+
+## Re-check rules
+
+Run a new Protection API check whenever any of the following changes:
+
+- Sender or recipient address
+- Chain or token
+- Amount
+- Settlement contract
+- Approval amount or requested permissions
+- Application policy requires a fresher decision
+- A prior check failed or cannot be tied to the final transaction
+
+A new check is also appropriate after a long user delay or before a materially changed execution attempt.
+
+## Integration guides
+
+Choose the guide that matches your integration type.
+
+<CardGroup cols={2}>
+  <Card title="Wallet Integration" icon="wallet" href="/guides/wallet-integration">
+    Embed Cardinal risk decisions before wallet signing with MetaMask and a server-side proxy.
+  </Card>
+  <Card title="Exchange Integration" icon="arrow-right-arrow-left" href="/guides/exchange-integration">
+    Protect exchange withdrawals and high-risk transfers before settlement.
+  </Card>
+  <Card title="Custodian & Vault Integration" icon="vault" href="/guides/custodian-vault-integration">
+    Add pre-transaction decisioning and policy controls to institutional vault workflows.
+  </Card>
+  <Card title="RWA & High-Value Payments" icon="building-columns" href="/guides/rwa-high-value-payments">
+    Protect property, tokenised-asset, OTC, and high-value payment flows.
+  </Card>
+</CardGroup>

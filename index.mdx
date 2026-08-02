@@ -1,20 +1,44 @@
 ---
-title: "Introduction"
-description: "Welcome to your project"
+title: "Cardinal Docs: Web3 Transaction Protection Hub"
+sidebarTitle: "Home"
+description: "Learn how Cardinal protects digital asset transactions by evaluating intent before signing — returning ALLOW, REVIEW, or BLOCK decisions."
 ---
 
-Write a short description of your product here. What it does, who it's for, and what they can accomplish with it.
+Cardinal is building the trust and protection layer for digital asset transactions. Before a wallet ever asks a user to sign, Cardinal evaluates transaction intent, explains identified risk in plain language, and routes users into safer settlement flows — so value only moves when it should.
 
-<Tip>
-  Ready to make this your own? Start by editing this page. Update your `docs.json` file to customize your site. Then fill out the [Quickstart](/quickstart) page.
-</Tip>
+<CardGroup cols={2}>
+  <Card title="Introduction" icon="book-open" href="/introduction">
+    Understand what Cardinal is, how the decision model works, and what the platform is built for.
+  </Card>
+  <Card title="Quickstart" icon="bolt" href="/quickstart">
+    Make your first `check-transaction` call and handle ALLOW, REVIEW, and BLOCK responses in minutes.
+  </Card>
+  <Card title="Protection API" icon="shield-check" href="/products/protection-api">
+    Evaluate proposed transactions and receive explainable `ALLOW`, `REVIEW`, or `BLOCK` decisions.
+  </Card>
+  <Card title="SafeSend" icon="paper-plane" href="/products/safesend">
+    Scan a token transfer before approval and contract execution to catch risk early.
+  </Card>
+  <Card title="Programmable Escrow" icon="handshake" href="/products/escrow">
+    Coordinate non-custodial buyer and seller settlement with release, refund, timeout, and dispute controls.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference">
+    Browse the full endpoint reference, request schemas, and response models.
+  </Card>
+</CardGroup>
 
-<Card title="Quickstart" icon="rocket" href="/quickstart">
-  This card links to the quickstart page in your project.
-</Card>
-<Card title="Components" icon="puzzle-piece" href="https://mintlify.com/docs/components">
-  Add cards, callouts, steps, tabs, and more to design and structure your pages.
-</Card>
-<Card title="Settings" icon="gear" href="https://mintlify.com/docs/organize/settings">
-  Set your site name, branding, and navigation in the `docs.json` file.
-</Card>
+## How Cardinal protects a transaction
+
+Every protected transaction flows through the same three-step sequence before a signature is ever requested.
+
+<Steps>
+  <Step title="Evaluate intent">
+    Your wallet, application, or integration submits the proposed transaction — sender, recipient, chain, token, and amount — to the Cardinal Protection API before prompting the user to sign.
+  </Step>
+  <Step title="Get a decision">
+    Cardinal's risk engine analyses network, recipient, wallet, and contract signals and returns a risk score, explainable findings, and a clear `ALLOW`, `REVIEW`, or `BLOCK` recommendation.
+  </Step>
+  <Step title="Route the transaction">
+    Your application continues normally on `ALLOW`, surfaces the identified risk for explicit acknowledgement on `REVIEW`, or stops the flow entirely on `BLOCK` — before any value moves.
+  </Step>
+</Steps>
