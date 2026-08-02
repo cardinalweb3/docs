@@ -1,0 +1,62 @@
+---
+title: "SafeSend"
+sidebarTitle: "SafeSend"
+description: "Cancellable, time-locked transfers that add a documented safety window to high-value transactions."
+---
+
+## Add a safety window before final settlement
+
+SafeSend is a protected transfer pattern for workflows where an immediate, irreversible transfer creates unnecessary risk. It introduces a defined time window in which an authorised action can cancel before settlement completes.
+
+## How SafeSend supports the workflow
+
+<Steps>
+  <Step title="Create the protected transfer">
+    The sender initiates a SafeSend transaction under the agreed pilot configuration.
+  </Step>
+  <Step title="Apply the time lock">
+    Funds follow the configured smart-contract flow rather than settling immediately.
+  </Step>
+  <Step title="Monitor the safety window">
+    The partner can apply its operational, legal and compliance checks during the defined period.
+  </Step>
+  <Step title="Settle or cancel">
+    The transfer completes when the conditions are met, or an authorised cancellation occurs under the agreed rules.
+  </Step>
+</Steps>
+
+## Where it can help
+
+<CardGroup cols={2}>
+  <Card title="High-value payments" icon="money-bill-transfer">
+    Add time to identify fraud, error or changed transaction context.
+  </Card>
+
+  <Card title="Property deposits" icon="house">
+    Use a controlled settlement pattern alongside the required legal and financial processes.
+  </Card>
+
+  <Card title="Corporate transfers" icon="building-columns">
+    Complement treasury approvals with a documented settlement window.
+  </Card>
+
+  <Card title="Design-partner integrations" icon="puzzle-piece">
+    Test the pattern in one defined workflow before wider deployment.
+  </Card>
+</CardGroup>
+
+## Current status
+
+<Card title="Controlled Arbitrum Sepolia testnet MVP" icon="flask">
+  SafeSend is a controlled MVP on the Arbitrum Sepolia testnet and is available to selected design partners under pilot terms. It is not represented as a production-ready mainnet service.
+</Card>
+
+## Operating boundary
+
+<Warning>
+  SafeSend is not licensed escrow, custody, legal or title review, KYC, KYB, AML, KYT, sanctions screening or source-of-funds review. Cardinal is non-custodial and never requests or holds private keys or seed phrases.
+</Warning>
+
+<Card title="Discuss a SafeSend pilot" icon="comments" href="/contact/discuss-a-pilot">
+  Explore a controlled testnet pilot for your high-value payment workflow.
+</Card>

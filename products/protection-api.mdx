@@ -1,0 +1,66 @@
+---
+title: "Protection API"
+sidebarTitle: "Protection API"
+description: "Pre-transaction risk decisioning that returns an explainable ALLOW, REVIEW or BLOCK decision before signing."
+---
+
+## Turn transaction risk into an action
+
+The Protection API evaluates a proposed digital-asset transaction before it is signed or submitted. It gives the partner workflow an explainable decision:
+
+<CardGroup cols={3}>
+  <Card title="ALLOW" icon="circle-check">
+    Continue only when Cardinal and the partner's own controls permit it.
+  </Card>
+
+  <Card title="REVIEW" icon="magnifying-glass">
+    Pause for additional user confirmation or operational review.
+  </Card>
+
+  <Card title="BLOCK" icon="octagon-xmark">
+    Stop the proposed transaction when the configured risk threshold is reached.
+  </Card>
+</CardGroup>
+
+## Where it fits
+
+<CardGroup cols={2}>
+  <Card title="Wallet approvals" icon="pen">
+    Add an explainable check before a signature request.
+  </Card>
+
+  <Card title="Exchange withdrawals" icon="arrow-up-from-bracket">
+    Evaluate the destination and transaction context before release.
+  </Card>
+
+  <Card title="Treasury transfers" icon="building-columns">
+    Add pre-signing decisioning to institutional approval flows.
+  </Card>
+
+  <Card title="RWA settlement" icon="stamp">
+    Check tokenised issuance, redemption and transfer activity before settlement.
+  </Card>
+</CardGroup>
+
+## Commercial value
+
+- Reduce avoidable losses caused by risky or erroneous transfers.
+- Give operations and support teams a consistent decision trail.
+- Introduce policy without taking custody of customer assets.
+- Start with one defined workflow and measure the result during a controlled pilot.
+
+## Current status
+
+<Card title="Available for pilot integration" icon="circle-check">
+  Protection API pre-transaction decisioning is available for controlled design-partner pilots. Integration scope and production commitments are agreement-specific.
+</Card>
+
+## Operating boundary
+
+<Warning>
+  Cardinal is non-custodial and never requests private keys or seed phrases. The Protection API does not replace KYC, KYB, AML, KYT, sanctions screening, source-of-funds review, custody, legal or title review, or licensed escrow. ALLOW is not a safety guarantee; partner controls must also pass.
+</Warning>
+
+<Card title="Discuss a Protection API pilot" icon="comments" href="/contact/discuss-a-pilot">
+  Scope a pilot around your wallet, withdrawal, treasury or settlement workflow.
+</Card>
