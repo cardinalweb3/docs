@@ -4,68 +4,113 @@ sidebarTitle: "Home"
 description: "Cardinal gives wallets, exchanges, custodians and high-value payment platforms an explainable decision layer before signing or settlement."
 ---
 
-Cardinal helps digital-asset businesses identify transaction risk **before** funds move, then apply protected settlement patterns when additional control is needed.
-
-<div className="mt-6 flex flex-wrap gap-3">
-  <a href="/contact/discuss-a-pilot" className="px-5 py-3 rounded-lg bg-[#5ECBE6] text-[#111318] font-medium">Discuss a pilot</a>
-  <a href="/overview/how-it-works" className="px-5 py-3 rounded-lg border border-white/15">See how Cardinal works</a>
-</div>
-
-<div className="mt-10 rounded-2xl border border-white/10 bg-[#1B1E24] p-6 md:p-8">
-  <div className="mb-6 flex items-center justify-between gap-4">
-    <div>
-      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[#5ECBE6]">Cardinal decision layer</div>
-      <div className="mt-2 text-xl font-semibold text-white">One control point before value moves</div>
-    </div>
-
-    <div className="rounded-full border border-[#5ECBE6]/30 bg-[#5ECBE6]/10 px-3 py-1 text-xs text-[#5ECBE6]">Pre-transaction</div>
+<div className="mb-10">
+  <div className="max-w-3xl text-lg text-gray-400">
+    Give every proposed transaction an explainable decision before signing—then apply protected settlement when the workflow needs more control.
   </div>
 
-  <div className="grid gap-3 md:grid-cols-3">
-    <div className="rounded-xl border border-white/10 bg-[#111318] p-5">
-      <div className="text-xs font-semibold text-[#5ECBE6]">01 · CHECK</div>
-      <div className="mt-2 font-semibold text-white">Evaluate the transaction</div>
-      <div className="mt-2 text-sm text-gray-400">Destination, network, transaction context and policy signals.</div>
+  <div className="mt-7 flex flex-wrap gap-3">
+    <a href="/contact/discuss-a-pilot" className="rounded-lg bg-[#5ECBE6] px-5 py-3 font-semibold text-[#111318] no-underline">Discuss a pilot</a>
+    <a href="/overview/how-it-works" className="rounded-lg border border-white/15 px-5 py-3 font-semibold text-white no-underline">See how it works</a>
+  </div>
+
+  <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-4">
+      <div className="text-xs uppercase tracking-wider text-gray-500">Decision point</div>
+      <div className="mt-1 font-semibold text-white">Before value moves</div>
     </div>
 
-    <div className="rounded-xl border border-white/10 bg-[#111318] p-5">
-      <div className="text-xs font-semibold text-[#8B6DFF]">02 · DECIDE</div>
-      <div className="mt-2 font-semibold text-white">Return an explainable outcome</div>
+    <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-4">
+      <div className="text-xs uppercase tracking-wider text-gray-500">Operating model</div>
+      <div className="mt-1 font-semibold text-white">Non-custodial</div>
+    </div>
+
+    <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-4">
+      <div className="text-xs uppercase tracking-wider text-gray-500">Decision output</div>
+      <div className="mt-1 font-semibold text-white">Explainable</div>
+    </div>
+
+    <div className="rounded-xl border border-white/10 bg-[#1B1E24] p-4">
+      <div className="text-xs uppercase tracking-wider text-gray-500">Starting point</div>
+      <div className="mt-1 font-semibold text-white">Controlled pilot</div>
+    </div>
+  </div>
+</div>
+
+---
+
+## One control point. Three actions.
+
+<div className="mt-6 rounded-2xl border border-white/10 bg-[#1B1E24] p-6 md:p-8">
+  <div className="grid gap-4 md:grid-cols-3">
+    <div className="rounded-xl border border-[#5ECBE6]/25 bg-[#111318] p-5">
+      <div className="text-xs font-semibold tracking-wider text-[#5ECBE6]">01 · CHECK</div>
+      <div className="mt-2 text-lg font-semibold text-white">Evaluate</div>
+      <p className="mt-2 text-sm text-gray-400">Assess destination, network, transaction context and partner policy signals.</p>
+    </div>
+
+    <div className="rounded-xl border border-[#8B6DFF]/25 bg-[#111318] p-5">
+      <div className="text-xs font-semibold tracking-wider text-[#8B6DFF]">02 · DECIDE</div>
+      <div className="mt-2 text-lg font-semibold text-white">Explain</div>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        <span className="rounded-full border border-[#22C55E]/30 bg-[#22C55E]/10 px-2.5 py-1 text-xs text-[#22C55E]">ALLOW</span>
-        <span className="rounded-full border border-[#F59E0B]/30 bg-[#F59E0B]/10 px-2.5 py-1 text-xs text-[#F59E0B]">REVIEW</span>
-        <span className="rounded-full border border-[#EF4444]/30 bg-[#EF4444]/10 px-2.5 py-1 text-xs text-[#EF4444]">BLOCK</span>
+        <span className="rounded-full bg-[#22C55E]/10 px-2.5 py-1 text-xs font-semibold text-[#22C55E]">ALLOW</span>
+        <span className="rounded-full bg-[#F59E0B]/10 px-2.5 py-1 text-xs font-semibold text-[#F59E0B]">REVIEW</span>
+        <span className="rounded-full bg-[#EF4444]/10 px-2.5 py-1 text-xs font-semibold text-[#EF4444]">BLOCK</span>
       </div>
     </div>
 
-    <div className="rounded-xl border border-white/10 bg-[#111318] p-5">
-      <div className="text-xs font-semibold text-[#5ECBE6]">03 · PROTECT</div>
-      <div className="mt-2 font-semibold text-white">Apply the right control</div>
-      <div className="mt-2 text-sm text-gray-400">Continue, pause for review, or use protected settlement.</div>
+    <div className="rounded-xl border border-[#5ECBE6]/25 bg-[#111318] p-5">
+      <div className="text-xs font-semibold tracking-wider text-[#5ECBE6]">03 · PROTECT</div>
+      <div className="mt-2 text-lg font-semibold text-white">Enforce</div>
+      <p className="mt-2 text-sm text-gray-400">Continue, pause for review, block, or route through protected settlement.</p>
     </div>
   </div>
 
-  <div className="mt-4 grid gap-3 border-t border-white/10 pt-4 text-sm md:grid-cols-3">
-    <div><span className="text-gray-500">Input</span><div className="mt-1 text-white">Proposed transaction</div></div>
-    <div><span className="text-gray-500">Output</span><div className="mt-1 text-white">Decision + reason</div></div>
-    <div><span className="text-gray-500">Partner action</span><div className="mt-1 text-white">Enforce policy</div></div>
+  <div className="mt-5 flex flex-wrap items-center gap-2 text-xs">
+    <span className="rounded-md border border-white/10 px-3 py-2 text-gray-300">Proposed transaction</span>
+    <span className="text-gray-600">→</span>
+    <span className="rounded-md border border-[#8B6DFF]/30 bg-[#8B6DFF]/10 px-3 py-2 text-[#C7B9FF]">Cardinal decision + reason</span>
+    <span className="text-gray-600">→</span>
+    <span className="rounded-md border border-white/10 px-3 py-2 text-gray-300">Partner enforcement</span>
   </div>
 </div>
 
-## Built for high-consequence transaction flows
+## Three products. One protection layer.
+
+<CardGroup cols={3}>
+  <Card title="Protection API" icon="shield" href="/products/protection-api">
+    **Available for pilot integration**
+
+    Explainable pre-transaction decisioning for wallet, withdrawal, treasury and settlement workflows.
+  </Card>
+
+  <Card title="SafeSend" icon="clock-rotate-left" href="/products/safesend">
+    **Controlled testnet MVP**
+
+    Cancellable, time-locked transfers on Arbitrum Sepolia for selected design partners.
+  </Card>
+
+  <Card title="Programmable Escrow" icon="handshake" href="/products/programmable-escrow">
+    **Final testing and hardening**
+
+    Rule-based release patterns for buyer/seller and threshold-gated settlement.
+  </Card>
+</CardGroup>
+
+## Built around your transaction workflow
 
 <CardGroup cols={2}>
   <Card title="Exchanges" icon="arrows-rotate" href="/solutions/exchanges">
-    Add explainable decisioning before outbound withdrawals.
+    Add an explainable decision before outbound withdrawals.
   </Card>
 
   <Card title="Wallet providers" icon="wallet" href="/solutions/wallet-providers">
-    Give users a clear check before signing without touching their keys.
+    Give users a clear pre-signing check without touching their keys.
   </Card>
 
   <Card title="Custodians & vaults" icon="vault" href="/solutions/custodians-vaults">
-    Add a policy layer before institutional HSM or MPC signing.
+    Add policy decisioning before institutional HSM or MPC signing.
   </Card>
 
   <Card title="RWA & tokenisation" icon="building-columns" href="/solutions/rwa-tokenisation">
@@ -75,40 +120,75 @@ Cardinal helps digital-asset businesses identify transaction risk **before** fun
   <Card title="Real estate & high-value payments" icon="house" href="/solutions/real-estate-high-value-payments">
     Add decisioning and protected settlement to large, one-off transfers.
   </Card>
-</CardGroup>
 
-## Cardinal products
-
-<CardGroup cols={3}>
-  <Card title="Protection API" icon="shield" href="/products/protection-api">
-    Pre-transaction risk decisioning with explainable outcomes. **Available for pilot integration.**
-  </Card>
-
-  <Card title="SafeSend" icon="clock-rotate-left" href="/products/safesend">
-    Cancellable, time-locked transfers. **Controlled Arbitrum Sepolia testnet MVP.**
-  </Card>
-
-  <Card title="Programmable Escrow" icon="handshake" href="/products/programmable-escrow">
-    On-chain settlement with rule-based release. **In final testing and security hardening.**
+  <Card title="Find the right pilot" icon="comments" href="/contact/discuss-a-pilot">
+    Start with one defined transaction flow and an agreed commercial outcome.
   </Card>
 </CardGroup>
 
-## Why commercial teams choose Cardinal
+## Clear about what is live
 
-- A visible control point before an irreversible transaction.
-- Explainable decisions that operations, risk and support teams can understand.
-- Non-custodial integration: Cardinal never requests private keys or seed phrases.
-- A controlled pilot route with agreed workflows and success measures.
-- Clear boundaries alongside existing compliance, custody and legal controls.
+<div className="grid gap-3 md:grid-cols-3">
+  <div className="rounded-xl border border-[#22C55E]/25 bg-[#22C55E]/5 p-5">
+    <div className="text-xs font-semibold text-[#22C55E]">AVAILABLE</div>
+    <div className="mt-2 font-semibold text-white">Protection API</div>
+    <div className="mt-1 text-sm text-gray-400">Pre-transaction decisioning for controlled pilot integrations.</div>
+  </div>
 
-<Warning>
-  Cardinal does not replace KYC, KYB, AML, KYT, sanctions screening, source-of-funds review, custody, legal or title review, or licensed escrow. An ALLOW decision is not a safety guarantee; partner controls must also pass.
-</Warning>
+  <div className="rounded-xl border border-[#F59E0B]/25 bg-[#F59E0B]/5 p-5">
+    <div className="text-xs font-semibold text-[#F59E0B]">CONTROLLED MVP</div>
+    <div className="mt-2 font-semibold text-white">SafeSend</div>
+    <div className="mt-1 text-sm text-gray-400">Arbitrum Sepolia testnet only; selected design partners.</div>
+  </div>
 
-## Start with a controlled pilot
+  <div className="rounded-xl border border-[#8B6DFF]/25 bg-[#8B6DFF]/5 p-5">
+    <div className="text-xs font-semibold text-[#8B6DFF]">FINAL TESTING</div>
+    <div className="mt-2 font-semibold text-white">Programmable Escrow</div>
+    <div className="mt-1 text-sm text-gray-400">Security hardening before broader pilot availability.</div>
+  </div>
+</div>
 
-A typical design-partner pilot runs for **60 to 90 days**, with final scope, support and commercial terms agreed for the specific deployment.
+<div className="mt-4 text-sm">
+  <a href="/overview/product-status">See full product status and roadmap →</a>
+</div>
 
-<Card title="Discuss your use case" icon="comments" href="/contact/discuss-a-pilot">
-  Tell us about the workflow, transaction type and outcome you want to improve.
-</Card>
+## Designed to complement your controls
+
+<div className="grid gap-4 md:grid-cols-2">
+  <div className="rounded-2xl border border-white/10 bg-[#1B1E24] p-6">
+    <div className="text-lg font-semibold text-white">Cardinal is</div>
+
+    <ul className="mt-3 space-y-2 text-sm text-gray-400">
+      <li>A pre-transaction decision layer</li>
+      <li>Non-custodial and trust-minimised</li>
+      <li>Explainable and auditable</li>
+      <li>Designed for partner enforcement</li>
+    </ul>
+  </div>
+
+  <div className="rounded-2xl border border-white/10 bg-[#1B1E24] p-6">
+    <div className="text-lg font-semibold text-white">Cardinal does not replace</div>
+
+    <ul className="mt-3 space-y-2 text-sm text-gray-400">
+      <li>KYC, KYB, AML, KYT or sanctions screening</li>
+      <li>Source-of-funds, legal or title review</li>
+      <li>Custody or licensed escrow</li>
+      <li>Your own policy and approval controls</li>
+    </ul>
+  </div>
+</div>
+
+<Note>
+  Cardinal never requests private keys or seed phrases. An **ALLOW** decision is not a safety guarantee; partner controls must also pass.
+</Note>
+
+<div className="mt-12 rounded-2xl border border-[#5ECBE6]/25 bg-[#5ECBE6]/5 p-7 md:p-9">
+  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[#5ECBE6]">Design-partner pilot</div>
+  <div className="mt-3 text-2xl font-semibold text-white">Start with one high-value workflow.</div>
+  <p className="mt-3 max-w-2xl text-gray-400">A typical pilot runs for 60 to 90 days. Final scope, success measures, support and commercial terms are agreed for the specific deployment.</p>
+
+  <div className="mt-6 flex flex-wrap gap-3">
+    <a href="/contact/discuss-a-pilot" className="rounded-lg bg-[#5ECBE6] px-5 py-3 font-semibold text-[#111318] no-underline">Discuss a pilot</a>
+    <a href="/pilot/overview" className="rounded-lg border border-white/15 px-5 py-3 font-semibold text-white no-underline">View the pilot programme</a>
+  </div>
+</div>
