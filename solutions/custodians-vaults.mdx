@@ -1,0 +1,77 @@
+---
+title: "Cardinal for Custodians & Vaults"
+sidebarTitle: "Custodians & Vaults"
+description: "Add an explainable policy layer before HSM or MPC signing on institutional treasury flows."
+---
+
+## Buyer problem
+
+Custodians and vault operators run tight approval workflows, but the decision at the point of signing is often binary and opaque. Compliance and risk teams want an explainable check that fits alongside HSM, MPC and existing policy engines, without giving up control of keys or workflow.
+
+## Cardinal solution
+
+Cardinal is called before the HSM or MPC signer is asked to sign. It returns a scored, explainable decision that plugs into your existing approval workflow and audit trail. Cardinal never touches keys and never takes custody.
+
+<Frame caption="Custodians and vaults sector visual — custom Cardinal imagery to be supplied">
+  <div style={{ padding: '48px', textAlign: 'center', border: '1px dashed rgba(94,203,230,0.4)', borderRadius: '12px', color: '#6B7280' }}>[ Custodians and vaults sector visual placeholder ]</div>
+</Frame>
+
+## Example protected workflow
+
+<Steps>
+  <Step title="Signer or automated policy proposes a transaction">
+    Your custody workflow assembles the transaction intent and prepares required approvers.
+  </Step>
+  <Step title="Your policy engine calls Cardinal">
+    Before the HSM or MPC signer is engaged, the Protection API is called with the transaction intent and context.
+  </Step>
+  <Step title="Cardinal returns an explainable decision">
+    ALLOW, REVIEW or BLOCK is returned with human-readable findings your risk and compliance teams can act on.
+  </Step>
+  <Step title="Approvers enforce the outcome">
+    ALLOW proceeds through your existing approval path. REVIEW and BLOCK route into compliance, risk or executive-approval queues.
+  </Step>
+  <Step title="Decisions and outcomes are logged">
+    Every step is retained for internal audit, external reporting and post-incident review.
+  </Step>
+</Steps>
+
+## Commercial value
+
+<CardGroup cols={2}>
+  <Card title="Explainable pre-signing check" icon="list-check">
+    Findings your compliance and risk teams can read and act on.
+  </Card>
+
+  <Card title="Fits existing controls" icon="puzzle-piece">
+    Cardinal augments HSM, MPC and policy engines rather than replacing them.
+  </Card>
+
+  <Card title="Auditable decisions" icon="file-lines">
+    Every request and outcome is logged for investigations and reporting.
+  </Card>
+
+  <Card title="Non-custodial" icon="key">
+    Cardinal never requests keys or takes custody of assets.
+  </Card>
+</CardGroup>
+
+## Capability boundary
+
+<Warning>
+  Cardinal does not replace custody, KYC, KYB, AML, KYT, sanctions screening, source-of-funds review or licensed escrow. It adds an explainable decision layer before signing. ALLOW is not a safety guarantee; partner controls must also pass.
+</Warning>
+
+## Pilot starting point
+
+A custodian pilot typically scopes one high-value flow (for example, outbound treasury transfers over a threshold), agrees measures with your risk and compliance teams, and runs for 60 to 90 days. Final scope and commercial terms are agreement-specific.
+
+<CardGroup cols={2}>
+  <Card title="Discuss a pilot" icon="envelope" href="mailto:contact@cardinalweb3.com">
+    Open a conversation about scoping a custodian or vault pilot.
+  </Card>
+
+  <Card title="Read the Pilot Programme" icon="flag" href="/pilot/overview">
+    See how design-partner pilots are structured end to end.
+  </Card>
+</CardGroup>

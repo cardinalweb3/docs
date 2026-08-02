@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "luma",
-  "name": "Cardinal",
+  "name": "Cardinal Sales & Partner Hub",
   "colors": {
-    "primary": "#1be49c",
-    "light": "#0c8c5c",
-    "dark": "#0c0c0c"
+    "primary": "#5ECBE6",
+    "light": "#5ECBE6",
+    "dark": "#111318"
   },
   "favicon": "https://media.brand.dev/483ee27f-08fb-4d32-842d-86b4c40f9fb4.png",
   "logo": {
@@ -15,87 +15,71 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Cardinal App",
-      "href": "https://app.cardinalweb3.com"
-    }
+      "label": "Discuss a pilot",
+      "href": "mailto:contact@cardinalweb3.com"
+    },
+    "links": [
+      {
+        "href": "https://cardinal-sales-and-partner-hub.mintlify.app/solutions/exchanges",
+        "label": "Explore solutions"
+      }
+    ]
   },
   "navigation": {
-    "tabs": [
+    "groups": [
       {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "product-status"
-            ]
-          },
-          {
-            "group": "Products",
-            "pages": [
-              "products/protection-api",
-              "products/safesend",
-              "products/escrow"
-            ]
-          },
-          {
-            "group": "Integration Guides",
-            "pages": [
-              "guides/integration-overview",
-              "guides/wallet-integration",
-              "guides/exchange-integration",
-              "guides/custodian-vault-integration",
-              "guides/rwa-high-value-payments"
-            ]
-          },
-          {
-            "group": "Security & Operations",
-            "pages": [
-              "security/best-practices",
-              "security/decision-enforcement",
-              "security/audit-logging"
-            ]
-          },
-          {
-            "group": "Resources",
-            "pages": [
-              "resources/pilot-onboarding",
-              "resources/faq",
-              "resources/support",
-              "resources/changelog"
-            ]
-          }
+        "group": "Overview",
+        "icon": "compass",
+        "pages": [
+          "index",
+          "overview/why-cardinal",
+          "overview/how-it-works",
+          "overview/product-status"
         ]
       },
       {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "api-reference/overview",
-              "api-reference/authentication",
-              "api-reference/rate-limits",
-              "api-reference/errors"
-            ]
-          },
-          {
-            "group": "Endpoints",
-            "pages": [
-              "api-reference/check-transaction",
-              "api-reference/health"
-            ]
-          },
-          {
-            "group": "Smart Contracts",
-            "pages": [
-              "api-reference/safesend-contract",
-              "api-reference/escrow-contract",
-              "api-reference/multisig-escrow-contract"
-            ]
-          }
+        "group": "Solutions",
+        "icon": "grid-2",
+        "pages": [
+          "solutions/exchanges",
+          "solutions/wallet-providers",
+          "solutions/custodians-vaults",
+          "solutions/rwa-tokenisation",
+          "solutions/real-estate-high-value-payments"
+        ]
+      },
+      {
+        "group": "Products",
+        "icon": "cube",
+        "pages": [
+          "products/protection-api",
+          "products/safesend",
+          "products/programmable-escrow"
+        ]
+      },
+      {
+        "group": "Pilot Programme",
+        "icon": "flag",
+        "pages": [
+          "pilot/overview",
+          "pilot/implementation-journey",
+          "pilot/success-measures"
+        ]
+      },
+      {
+        "group": "Trust",
+        "icon": "shield-halved",
+        "pages": [
+          "trust/security-controls",
+          "trust/capability-boundaries",
+          "trust/faq"
+        ]
+      },
+      {
+        "group": "Contact",
+        "icon": "envelope",
+        "pages": [
+          "contact/discuss-a-pilot"
         ]
       }
     ]
@@ -116,5 +100,18 @@
       "icon": "github",
       "url": "https://github.com/Cardinal-Web3"
     }
-  ]
+  ],
+  "description": "Explore Cardinal's transaction protection, protected settlement and pilot solutions for wallets, exchanges, custodians, RWA platforms and high-value payments.",
+  "appearance": {
+    "default": "dark"
+  },
+  "background": {
+    "color": {
+      "light": "#F8FAFC",
+      "dark": "#111318"
+    }
+  },
+  "fonts": {
+    "family": "Geist"
+  }
 }

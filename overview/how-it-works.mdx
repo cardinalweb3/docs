@@ -1,0 +1,82 @@
+---
+title: "How It Works"
+sidebarTitle: "How It Works"
+description: "Cardinal's Check, Decide, Protect model for transaction integrity, risk decisioning and protected settlement."
+---
+
+Cardinal adds one explainable decision point to your existing transaction flow. It runs before signing or settlement, and returns a scored decision that your product can enforce, log and reconcile.
+
+## The Check, Decide, Protect model
+
+<Steps>
+  <Step title="Check">
+    Your platform sends transaction intent (counterparties, amount, context) to Cardinal's Protection API before requesting a signature.
+  </Step>
+  <Step title="Decide">
+    Cardinal's Risk Engine returns a scored decision (ALLOW, REVIEW, or BLOCK) with human-readable findings your teams can act on.
+  </Step>
+  <Step title="Protect">
+    For high-value flows, transfers can be routed through SafeSend or Programmable Escrow to add a cancellation window or controlled release before funds are final.
+  </Step>
+</Steps>
+
+## Where Cardinal fits
+
+<Tabs>
+  <Tab title="Wallets">
+    Cardinal is called before the wallet's sign prompt. Users see an explainable risk summary and your wallet enforces the decision.
+  </Tab>
+  <Tab title="Exchanges">
+    Cardinal is called before an outbound withdrawal is signed or broadcast. Reviews are routed to your operations queue.
+  </Tab>
+  <Tab title="Custodians & Vaults">
+    Cardinal is called before HSM or MPC signing. High-risk decisions route into your existing approval workflows.
+  </Tab>
+  <Tab title="RWA & Payments">
+    Cardinal is called before primary issuance, redemption, or large one-off payments. High-value flows can be routed through protected settlement.
+  </Tab>
+</Tabs>
+
+## The three decision states
+
+| Decision | What it means | Typical action |
+| --- | --- | --- |
+| `ALLOW` | Cardinal did not detect risk in the transaction intent. | Proceed subject to your other controls. |
+| `REVIEW` | Cardinal identified findings that warrant review. | Route to operations, compliance, or additional user confirmation. |
+| `BLOCK` | Cardinal identified findings that recommend blocking. | Prevent signing or settlement and surface the reason. |
+
+<Note>
+  ALLOW is not a safety guarantee. It means Cardinal did not detect risk on the checked signals. Your KYC, KYB, AML, sanctions and internal policy controls must still pass.
+</Note>
+
+## Operational fit
+
+<CardGroup cols={2}>
+  <Card title="Explainability" icon="eye">
+    Every decision includes findings so operations, compliance and support can act with context.
+  </Card>
+
+  <Card title="Auditability" icon="file-lines">
+    Decisions and outcomes are logged to support investigations, reconciliation and reporting.
+  </Card>
+
+  <Card title="Non-custodial" icon="key">
+    Cardinal never requests private keys or seed phrases and does not take custody of user funds.
+  </Card>
+
+  <Card title="Extends your controls" icon="puzzle-piece">
+    Cardinal complements KYC, KYB, AML, sanctions and policy controls; it does not replace them.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Product Status" icon="signal" href="/overview/product-status">
+    See what is live today, what is in pilot, and what is on the roadmap.
+  </Card>
+
+  <Card title="Discuss a pilot" icon="envelope" href="mailto:contact@cardinalweb3.com">
+    Open a conversation about a design-partner pilot.
+  </Card>
+</CardGroup>

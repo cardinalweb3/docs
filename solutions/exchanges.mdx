@@ -1,0 +1,81 @@
+---
+title: "Cardinal for Exchanges"
+sidebarTitle: "Exchanges"
+description: "Reduce withdrawal fraud, cut support load, and add an explainable decision point before every outbound transfer."
+---
+
+## Buyer problem
+
+Exchanges carry the reputational and financial cost of fraudulent withdrawals, hijacked accounts and social-engineering attacks. Reviews are often reactive, and support teams spend hours reconstructing what happened after value has already left the platform.
+
+## Cardinal solution
+
+Cardinal places an explainable risk decision point before an outbound withdrawal is signed or broadcast. Every withdrawal is evaluated for intent and counterparties, and returns a scored ALLOW, REVIEW, or BLOCK decision that plugs into your operations queue and audit trail.
+
+<Frame caption="Exchanges sector visual — custom Cardinal imagery to be supplied">
+  <div style={{ padding: '48px', textAlign: 'center', border: '1px dashed rgba(94,203,230,0.4)', borderRadius: '12px', color: '#6B7280' }}>[ Exchanges sector visual placeholder ]</div>
+</Frame>
+
+## Example protected workflow
+
+<Steps>
+  <Step title="User requests a withdrawal">
+    Your platform captures the withdrawal request and assembles the transaction intent.
+  </Step>
+  <Step title="Your backend calls Cardinal">
+    Before signing or broadcast, your service calls the Protection API with counterparties, amount, asset and context.
+  </Step>
+  <Step title="Cardinal returns a scored decision">
+    ALLOW, REVIEW or BLOCK is returned with human-readable findings your teams can act on.
+  </Step>
+  <Step title="Your platform enforces the outcome">
+    ALLOW proceeds subject to your other controls. REVIEW pauses the withdrawal into your operations queue. BLOCK stops the transfer with an explainable reason.
+  </Step>
+  <Step title="You log the decision for audit">
+    Every decision, finding and downstream outcome is retained for investigations, reconciliation and reporting.
+  </Step>
+</Steps>
+
+## Capability boundary
+
+<Warning>
+  Cardinal complements your KYC, KYB, AML, KYT and sanctions controls; it does not replace them. Pre-transaction decisioning is available today. Incoming-funds tracing and stolen or hacked-funds detection are on the roadmap and are not available at this time.
+</Warning>
+
+## Commercial value
+
+<CardGroup cols={2}>
+  <Card title="Reduce fraud loss" icon="shield-check">
+    Move risk decisions upstream of signing, where losses are still recoverable.
+  </Card>
+
+  <Card title="Lower support cost" icon="headset">
+    Fewer disputed withdrawals, and better evidence for the ones that remain.
+  </Card>
+
+  <Card title="Cleaner audit trail" icon="file-lines">
+    Every decision and outcome is logged for investigations and reporting.
+  </Card>
+
+  <Card title="Explainable to regulators" icon="scale-balanced">
+    Human-readable findings support your existing compliance narrative.
+  </Card>
+</CardGroup>
+
+<Note>
+  Cardinal complements, and does not replace, your KYC, AML, KYT and sanctions controls. ALLOW is not a safety guarantee.
+</Note>
+
+## Pilot starting point
+
+A typical exchange pilot scopes a single withdrawal flow (for example, first-party crypto withdrawals over a set threshold), agrees success measures with your operations and compliance teams, and runs for 60 to 90 days. Final scope, timelines and commercial terms are agreement-specific.
+
+<CardGroup cols={2}>
+  <Card title="Discuss a pilot" icon="envelope" href="mailto:contact@cardinalweb3.com">
+    Open a conversation about scoping an exchange pilot.
+  </Card>
+
+  <Card title="Read the Pilot Programme" icon="flag" href="/pilot/overview">
+    See how design-partner pilots are structured end to end.
+  </Card>
+</CardGroup>

@@ -1,0 +1,81 @@
+---
+title: "Cardinal for Wallet Providers"
+sidebarTitle: "Wallet Providers"
+description: "Give your users an explainable check before they sign, without ever touching keys or seed phrases."
+---
+
+## Buyer problem
+
+Wallets are the last line of defence before a user signs. When approval prompts are opaque, users approve transactions they do not fully understand. When users lose funds, they blame the wallet, and support and reputation take the hit.
+
+## Cardinal solution
+
+Cardinal is called before your wallet's sign prompt. It evaluates intent and returns an explainable ALLOW, REVIEW, or BLOCK decision alongside findings your UI can render. Cardinal never requests private keys or seed phrases and never takes custody.
+
+<Frame caption="Wallet providers sector visual — custom Cardinal imagery to be supplied">
+  <div style={{ padding: '48px', textAlign: 'center', border: '1px dashed rgba(94,203,230,0.4)', borderRadius: '12px', color: '#6B7280' }}>[ Wallet providers sector visual placeholder ]</div>
+</Frame>
+
+## Example protected workflow
+
+<Steps>
+  <Step title="User initiates a transaction">
+    Your wallet prepares the transaction intent from the dApp interaction or user input.
+  </Step>
+  <Step title="Wallet calls Cardinal before signing">
+    The Protection API is called with the transaction intent, counterparties and context.
+  </Step>
+  <Step title="Cardinal returns an explainable decision">
+    ALLOW, REVIEW or BLOCK is returned with human-readable findings the wallet UI can render.
+  </Step>
+  <Step title="Wallet renders a clearer prompt">
+    Users see a plain-language risk summary. REVIEW and BLOCK decisions can pause signing and surface the reason.
+  </Step>
+  <Step title="Wallet enforces and logs the outcome">
+    Signing only proceeds when your policy allows, and the decision is retained for support and audit.
+  </Step>
+</Steps>
+
+## Capability boundary
+
+<Warning>
+  Cardinal never requests private keys or seed phrases and does not take custody of user funds. Pre-transaction decisioning is available today. Incoming-funds tracing and stolen or hacked-funds detection are on the roadmap.
+</Warning>
+
+## Commercial value
+
+<CardGroup cols={2}>
+  <Card title="Fewer regret events" icon="shield-check">
+    Catch risky transactions before the user has signed away recovery.
+  </Card>
+
+  <Card title="Trust as a feature" icon="handshake">
+    An explainable check becomes a visible reason to choose your wallet.
+  </Card>
+
+  <Card title="Lower support burden" icon="headset">
+    Fewer post-hoc "why did I lose funds" tickets, and better evidence when they arrive.
+  </Card>
+
+  <Card title="Non-custodial by design" icon="key">
+    Cardinal never asks for keys, seed phrases, or takes custody of user funds.
+  </Card>
+</CardGroup>
+
+<Note>
+  ALLOW is not a safety guarantee. Cardinal augments your wallet's controls; it does not replace them.
+</Note>
+
+## Pilot starting point
+
+A wallet pilot typically scopes one signing flow (for example, ERC-20 transfers or approvals over a set threshold), agrees measures with your product and support teams, and runs for 60 to 90 days. Final scope and commercial terms are agreement-specific.
+
+<CardGroup cols={2}>
+  <Card title="Discuss a pilot" icon="envelope" href="mailto:contact@cardinalweb3.com">
+    Open a conversation about scoping a wallet pilot.
+  </Card>
+
+  <Card title="Read the Pilot Programme" icon="flag" href="/pilot/overview">
+    See how design-partner pilots are structured end to end.
+  </Card>
+</CardGroup>
